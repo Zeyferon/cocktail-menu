@@ -187,7 +187,7 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
     id: 13,
     name: "Bloody Mary",
     tag: "Savory • Spicy • Classic",
-    image: "https://images.unsplash.com/photo-1604908554026-0b5b9e3a5a3d?w=400&h=400&fit=crop",
+    image: "https://i.pinimg.com/736x/7c/e9/e5/7ce9e5f25bb0c957e55a4afb4b3187c6.jpg",
     ingredients: [
         { name: "Vodka", amount: "50ml" },
         { name: "Tomato Juice", amount: "120ml" },
@@ -201,7 +201,7 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
     id: 14,
     name: "Coffee",
     tag: "Hot • Simple • Energizing",
-    image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=400&fit=crop",
+    image: "https://i.pinimg.com/1200x/f8/06/7a/f8067a5ee05e97769d02aca1405dfd75.jpg",
     ingredients: [
         { name: "Coffee", amount: "1 cup" },
         { name: "Sugar", amount: "Optional" },
@@ -213,7 +213,7 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
     id: 15,
     name: "Tea",
     tag: "Hot • Calm • Classic",
-    image: "https://images.unsplash.com/photo-1518976024611-488f3f7b1f89?w=400&h=400&fit=crop",
+    image: "https://i.pinimg.com/1200x/74/eb/11/74eb11bfe223256ca55aeea7c65642f7.jpg",
     ingredients: [
         { name: "Tea Bag", amount: "1" },
         { name: "Hot Water", amount: "250ml" },
@@ -225,7 +225,7 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
     id: 16,
     name: "Juice",
     tag: "Fresh • Non-Alcoholic • Choice",
-    image: "https://images.unsplash.com/photo-1571687949921-1306bfb24b72?w=400&h=400&fit=crop",
+    image: "https://i.pinimg.com/1200x/2d/62/94/2d62940fe3120a11053d4bf2de408e02.jpg",
     ingredients: [
         { name: "Available Juices", amount: "" }
     ],
@@ -497,6 +497,7 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
     // Start the app
     init();
 });
+
 
 
 

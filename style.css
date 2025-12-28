@@ -109,6 +109,119 @@ body {
     flex-direction: column;
     gap: 10px;
 }
+/* Language Switcher */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.language-switcher {
+    position: relative;
+    z-index: 1001;
+}
+
+.language-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid var(--light-green);
+    border-radius: 12px;
+    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--darker);
+    transition: var(--transition);
+    min-width: 70px;
+    justify-content: center;
+}
+
+.language-btn:hover {
+    background: white;
+    border-color: var(--violet);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.language-btn i {
+    color: var(--violet);
+}
+
+.language-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    padding: 10px;
+    display: none;
+    flex-direction: column;
+    min-width: 150px;
+    margin-top: 5px;
+    animation: slideDown 0.3s ease;
+}
+
+.language-switcher:hover .language-dropdown,
+.language-dropdown:hover {
+    display: flex;
+}
+
+.language-option {
+    padding: 12px 15px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    transition: var(--transition);
+    color: var(--darker);
+    font-size: 0.95rem;
+}
+
+.language-option:hover {
+    background: linear-gradient(45deg, var(--light-green), var(--light-blue));
+}
+
+.language-option.active {
+    background: linear-gradient(45deg, var(--violet), var(--pink));
+    color: white;
+}
+
+.flag {
+    font-size: 1.2rem;
+}
+
+/* Translation animation */
+[data-i18n] {
+    transition: opacity 0.3s ease;
+}
+
+[data-i18n].translating {
+    opacity: 0.5;
+}
+
+/* Update for smaller screens */
+@media (max-width: 480px) {
+    .language-btn span {
+        display: none;
+    }
+    
+    .language-btn {
+        min-width: 44px;
+        width: 44px;
+        justify-content: center;
+    }
+    
+    .language-dropdown {
+        right: -10px;
+        min-width: 140px;
+    }
+}
 
 @keyframes slideDown {
     from {
@@ -609,6 +722,7 @@ body {
     animation: pulse 2s infinite;
 }
 
+
 @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.05); }
@@ -851,6 +965,7 @@ button, a {
     background: var(--violet);
     border-radius: 3px;
 }
+
 
 
 

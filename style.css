@@ -288,12 +288,12 @@ body {
 
 /* Card Content */
 .cocktail-image {
-    width: 100px;
-    height: 180px;
-    border-radius: 0%;
-    object-fit: cover;
-    margin-bottom: 15px;
-    border: none;
+    width: 100%;           /* fills card width */
+    height: 180px;         /* fixed height or adjust as needed */
+    border-radius: 0;      /* rectangular */
+    object-fit: cover;     /* fills box without stretching */
+    margin-bottom: 15px;   /* space below image */
+    border: none;          /* optional: remove white border */
     box-shadow: var(--shadow-sm);
 }
 
@@ -840,4 +840,5 @@ button, a {
     background: var(--violet);
     border-radius: 3px;
 }
+
 

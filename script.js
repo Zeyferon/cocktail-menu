@@ -140,7 +140,7 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
     id: 10,
     name: "Coca-Cola & Rum",
     tag: "Classic • Simple • Timeless",
-    image: "https://images.unsplash.com/photo-1626197031507-c17099753214?w=400&h=400&fit=crop",
+    image: "https://i.pinimg.com/1200x/2b/c4/d1/2bc4d1aa3025e01e5ea116512f102377.jpg",
     ingredients: [
         { name: "White or Dark Rum", amount: "50ml" },
         { name: "Coca-Cola", amount: "150ml" },
@@ -156,7 +156,7 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
     id: 11,
     name: "Куманёк",
     tag: "Bold • Rustic • Funny",
-    image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400&h=400&fit=crop",
+    image: "https://i.pinimg.com/736x/c6/ad/29/c6ad297a8290d20893e07c24be3d7212.jpg",
     ingredients: [
         { name: "Light Beer", amount: "250ml" },
         { name: "Vodka", amount: "30ml" },
@@ -171,7 +171,7 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
     id: 12,
     name: "Rum Punch",
     tag: "Fruity • Tropical • Party",
-    image: "https://images.unsplash.com/photo-1582571352032-448f7928eca5?w=400&h=400&fit=crop",
+    image: "https://i.pinimg.com/736x/ad/8d/d1/ad8dd1ed104b30bdc9a9e26f902ded3b.jpg",
     ingredients: [
         { name: "Rum", amount: "60ml" },
         { name: "Pineapple Juice", amount: "60ml" },
@@ -449,5 +449,6 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
     // Start the app
     init();
 });
+
 
 

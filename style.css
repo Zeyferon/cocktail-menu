@@ -274,17 +274,14 @@ body {
     background: linear-gradient(135deg, var(--pink) 0%, var(--orange) 100%);
     color: white;
 
-    display: flex;              /* 🔥 required */
-    flex-direction: column;     /* stack image + text */
-
-    align-items: stretch;       /* 🔥 allow full-width image */
-    justify-content: flex-start;/* 🔥 image stays at top */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
 
     text-align: center;
-    padding: 0;                 /* 🔥 remove padding */
-
-
 }
+
 
 .card-back {
     background: linear-gradient(135deg, var(--light-blue) 0%, var(--light-green) 100%);
@@ -297,18 +294,18 @@ body {
 /* Card Content */
 .cocktail-image {
     width: 100%;
-    height: 220px;
+    height: 160px;            /* 👈 smaller = drink visible */
+    
+    object-fit: contain;      /* 👈 show FULL drink */
+    object-position: center;
 
-    object-fit: cover;
-    object-position: top center;   /* 👈 shows top of the drink */
+    border-radius: 16px;      /* smooth corners */
+    margin-bottom: 12px;
 
-    border-radius: 20px 20px 0 0;  /* 👈 rounded top, flat bottom */
-    margin-bottom: 15px;
-
-    display: block;
-
-
+    background: rgba(255,255,255,0.15); /* subtle frame */
+    padding: 8px;             /* prevents edge cut */
 }
+
 
 
 .cocktail-name {
@@ -854,6 +851,7 @@ button, a {
     background: var(--violet);
     border-radius: 3px;
 }
+
 
 
 

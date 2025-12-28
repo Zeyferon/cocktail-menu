@@ -1,238 +1,216 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Cocktails Data
-    const cocktails = [
+    // Cocktails Data - Original data that won't change
+    const originalCocktails = [
         {
             id: 1,
-name: "Strawberry Banana Cream",
-tag: "Creamy • Tropical • Sweet",
-image: "https://i.pinimg.com/1200x/ee/73/34/ee733440c7506d18690696123a608211.jpg",
-ingredients: [
-    { name: "Vodka", amount: "50ml" },
-    { name: "Banana", amount: "1 whole" },
-    { name: "Strawberries", amount: "100g" },
-    { name: "Piña Colada", amount: "150ml" },
-    { name: "Ice", amount: "1 cup" }
-],
-instructions: "1. Add banana and strawberries to the blender and blend until smooth. 2. Add piña colada and ice, then blend again until creamy. 3. Add vodka last and pulse lightly to combine. 4. Pour into a chilled glass and garnish with sugar or colorful sprinkles."
-
+            name: "Strawberry Banana Cream",
+            tag: "Creamy • Tropical • Sweet",
+            image: "https://i.pinimg.com/1200x/ee/73/34/ee733440c7506d18690696123a608211.jpg",
+            ingredients: [
+                { name: "Vodka", amount: "50ml" },
+                { name: "Banana", amount: "1 whole" },
+                { name: "Strawberries", amount: "100g" },
+                { name: "Piña Colada", amount: "150ml" },
+                { name: "Ice", amount: "1 cup" }
+            ],
+            instructions: "1. Add banana and strawberries to the blender and blend until smooth. 2. Add piña colada and ice, then blend again until creamy. 3. Add vodka last and pulse lightly to combine. 4. Pour into a chilled glass and garnish with sugar or colorful sprinkles."
         },
         {
-           id: 2,
-name: "Blue Pineapple Lagoon",
-tag: "Tropical • Electric • Refreshing",
-image: "https://i.pinimg.com/736x/7b/d9/74/7bd97494a9fe81f3e295722e07613425.jpg",
-ingredients: [
-    { name: "Vodka", amount: "50ml" },
-    { name: "Pineapple Juice", amount: "120ml" },
-    { name: "Blue Curaçao", amount: "20ml" },
-    { name: "Ice", amount: "Cubes" },
-    { name: "Ginger Ale", amount: "Optional top" }
-],
-instructions: "1. Fill a shaker with ice, then add vodka and pineapple juice. 2. Shake well and strain into an ice-filled glass. 3. Slowly pour blue curaçao on top to create a layered effect. 4. Optionally top with ginger ale and serve immediately."
-
+            id: 2,
+            name: "Blue Pineapple Lagoon",
+            tag: "Tropical • Electric • Refreshing",
+            image: "https://i.pinimg.com/736x/7b/d9/74/7bd97494a9fe81f3e295722e07613425.jpg",
+            ingredients: [
+                { name: "Vodka", amount: "50ml" },
+                { name: "Pineapple Juice", amount: "120ml" },
+                { name: "Blue Curaçao", amount: "20ml" },
+                { name: "Ice", amount: "Cubes" },
+                { name: "Ginger Ale", amount: "Optional top" }
+            ],
+            instructions: "1. Fill a shaker with ice, then add vodka and pineapple juice. 2. Shake well and strain into an ice-filled glass. 3. Slowly pour blue curaçao on top to create a layered effect. 4. Optionally top with ginger ale and serve immediately."
         },
         {
-           id: 3,
-name: "Malibu Sunset",
-tag: "Sweet • Tropical • Smooth",
-image: "https://i.pinimg.com/1200x/89/f6/8d/89f68d5c8fcf8c87295738e9b4097c86.jpg",
-ingredients: [
-    { name: "Malibu", amount: "50ml" },
-    { name: "Orange Juice", amount: "120ml" },
-    { name: "Strawberry Fanta", amount: "Top up" },
-    { name: "Ice", amount: "Cubes" }
-],
-instructions: "1. Fill a tall glass with ice. 2. Pour in Malibu. 3. Fill with orange juice. 4. Gently top with strawberry Fanta to create a sunset effect. 5. Do not stir and serve immediately."
-
+            id: 3,
+            name: "Malibu Sunset",
+            tag: "Sweet • Tropical • Smooth",
+            image: "https://i.pinimg.com/1200x/89/f6/8d/89f68d5c8fcf8c87295738e9b4097c86.jpg",
+            ingredients: [
+                { name: "Malibu", amount: "50ml" },
+                { name: "Orange Juice", amount: "120ml" },
+                { name: "Strawberry Fanta", amount: "Top up" },
+                { name: "Ice", amount: "Cubes" }
+            ],
+            instructions: "1. Fill a tall glass with ice. 2. Pour in Malibu. 3. Fill with orange juice. 4. Gently top with strawberry Fanta to create a sunset effect. 5. Do not stir and serve immediately."
         },
         {
             id: 4,
-name: "Mango Guava Vodka Smash",
-tag: "Fresh • Juicy • Tropical",
-image: "https://i.pinimg.com/1200x/81/89/6d/81896d52dc3cf64dd4fe42d2f483c432.jpg",
-ingredients: [
-    { name: "Vodka", amount: "50ml" },
-    { name: "Mango Juice", amount: "80ml" },
-    { name: "Guava Juice", amount: "80ml" },
-    { name: "Fresh Lime Juice", amount: "20ml" },
-    { name: "Ice", amount: "Cubes" }
-],
-instructions: "1. Fill a shaker with ice. 2. Add vodka, mango juice, guava juice, and lime juice. 3. Shake well until chilled. 4. Strain into a glass over ice. 5. Optionally garnish with a lime wedge or sugar rim."
-
+            name: "Mango Guava Vodka Smash",
+            tag: "Fresh • Juicy • Tropical",
+            image: "https://i.pinimg.com/1200x/81/89/6d/81896d52dc3cf64dd4fe42d2f483c432.jpg",
+            ingredients: [
+                { name: "Vodka", amount: "50ml" },
+                { name: "Mango Juice", amount: "80ml" },
+                { name: "Guava Juice", amount: "80ml" },
+                { name: "Fresh Lime Juice", amount: "20ml" },
+                { name: "Ice", amount: "Cubes" }
+            ],
+            instructions: "1. Fill a shaker with ice. 2. Add vodka, mango juice, guava juice, and lime juice. 3. Shake well until chilled. 4. Strain into a glass over ice. 5. Optionally garnish with a lime wedge or sugar rim."
         },
         {
             id: 5,
-name: "Green Apple Fizz",
-tag: "Fresh • Fizzy • Aesthetic",
-image: "https://i.pinimg.com/1200x/fa/dd/1e/fadd1e9427bfa1c5e7daf926a5146694.jpg",
-ingredients: [
-    { name: "Vodka", amount: "50ml" },
-    { name: "Green Apple", amount: "1/2, muddled" },
-    { name: "Apple Juice", amount: "100ml" },
-    { name: "Ginger Ale", amount: "Top up" },
-    { name: "Ice", amount: "Cubes" }
-],
-instructions: "1. Muddle the green apple in a shaker. 2. Add vodka, apple juice, and ice. 3. Shake well and strain into a glass filled with ice. 4. Top with ginger ale. 5. Optionally garnish with green sprinkles or apple slice."
-
+            name: "Green Apple Fizz",
+            tag: "Fresh • Fizzy • Aesthetic",
+            image: "https://i.pinimg.com/1200x/fa/dd/1e/fadd1e9427bfa1c5e7daf926a5146694.jpg",
+            ingredients: [
+                { name: "Vodka", amount: "50ml" },
+                { name: "Green Apple", amount: "1/2, muddled" },
+                { name: "Apple Juice", amount: "100ml" },
+                { name: "Ginger Ale", amount: "Top up" },
+                { name: "Ice", amount: "Cubes" }
+            ],
+            instructions: "1. Muddle the green apple in a shaker. 2. Add vodka, apple juice, and ice. 3. Shake well and strain into a glass filled with ice. 4. Top with ginger ale. 5. Optionally garnish with green sprinkles or apple slice."
         },
         {
-           id: 6,
-name: "Purple Galaxy",
-tag: "Sweet • Smooth • Vibrant",
-image: "https://i.pinimg.com/736x/9c/5f/a6/9c5fa6ed9307025082e35824f044ba0b.jpg",
-ingredients: [
-    { name: "Vodka", amount: "50ml" },
-    { name: "Grape Juice", amount: "60ml" },
-    { name: "Blueberry Juice", amount: "60ml" },
-    { name: "Cranberry Juice", amount: "Splash" },
-    { name: "Ice", amount: "Cubes" }
-],
-instructions: "1. Fill a shaker with ice. 2. Add vodka, grape juice, blueberry juice, and a splash of cranberry juice. 3. Shake well until chilled. 4. Strain into a glass over fresh ice. 5. Serve immediately and optionally garnish with berries."
-
+            id: 6,
+            name: "Purple Galaxy",
+            tag: "Sweet • Smooth • Vibrant",
+            image: "https://i.pinimg.com/736x/9c/5f/a6/9c5fa6ed9307025082e35824f044ba0b.jpg",
+            ingredients: [
+                { name: "Vodka", amount: "50ml" },
+                { name: "Grape Juice", amount: "60ml" },
+                { name: "Blueberry Juice", amount: "60ml" },
+                { name: "Cranberry Juice", amount: "Splash" },
+                { name: "Ice", amount: "Cubes" }
+            ],
+            instructions: "1. Fill a shaker with ice. 2. Add vodka, grape juice, blueberry juice, and a splash of cranberry juice. 3. Shake well until chilled. 4. Strain into a glass over fresh ice. 5. Serve immediately and optionally garnish with berries."
         },
         {
-        id: 7,
-name: "Watermelon Mojito Remix",
-tag: "Refreshing • Fruity • Light",
-image: "https://i.pinimg.com/736x/4f/32/e8/4f32e86b53c3d581b610d6c71c392403.jpg",
-ingredients: [
-    { name: "Vodka", amount: "50ml" },
-    { name: "Watermelon Mojito (can)", amount: "120ml" },
-    { name: "Fresh Lime Juice", amount: "15ml" },
-    { name: "Ice", amount: "Cubes" }
-],
-instructions: "1. Fill a glass with ice. 2. Pour in vodka and watermelon mojito. 3. Add fresh lime juice. 4. Lightly stir to combine. 5. Serve immediately, optionally garnish with a lime wedge."
-
-},
-        {
-id: 8,
-name: "Frozen Party Slush",
-tag: "Big Batch • Fun • Slushy",
-image: "https://i.pinimg.com/736x/28/98/28/28982869538c7013bd558cdaf9f05dc5.jpg",
-ingredients: [
-    { name: "Piña Colada (can)", amount: "150ml" },
-    { name: "Strawberry Fanta", amount: "150ml" },
-    { name: "Vodka or Malibu", amount: "50ml" },
-    { name: "Ice", amount: "2 cups" }
-],
-instructions: "1. Add ice, piña colada, strawberry Fanta, and vodka or Malibu into a blender. 2. Blend until smooth and slushy. 3. Pour into glasses immediately. 4. Optionally garnish with colorful sprinkles or fruit slices for extra fun."
-
+            id: 7,
+            name: "Watermelon Mojito Remix",
+            tag: "Refreshing • Fruity • Light",
+            image: "https://i.pinimg.com/736x/4f/32/e8/4f32e86b53c3d581b610d6c71c392403.jpg",
+            ingredients: [
+                { name: "Vodka", amount: "50ml" },
+                { name: "Watermelon Mojito (can)", amount: "120ml" },
+                { name: "Fresh Lime Juice", amount: "15ml" },
+                { name: "Ice", amount: "Cubes" }
+            ],
+            instructions: "1. Fill a glass with ice. 2. Pour in vodka and watermelon mojito. 3. Add fresh lime juice. 4. Lightly stir to combine. 5. Serve immediately, optionally garnish with a lime wedge."
         },
         {
-id: 9,
-name: "Margarita",
-tag: "Zesty • Salty • Classic",
-image: "https://i.pinimg.com/1200x/83/17/ad/8317ad3eed28a28773e98bed3d3aa55b.jpg",
-ingredients: [
-    { name: "Tequila", amount: "50ml" },
-    { name: "Fresh Lime Juice", amount: "25ml" },
-    { name: "Triple Sec", amount: "20ml" },
-    { name: "Agave Syrup", amount: "15ml" },
-    { name: "Salt", amount: "For rim" }
-],
-instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add tequila, lime juice, triple sec, and agave syrup. 3. Shake well until chilled. 4. Strain into the prepared glass over fresh ice. 5. Garnish with a lime wheel and serve immediately."
-
-
-        },
-
-        {
-
-    id: 10,
-    name: "Coca-Cola & Rum",
-    tag: "Classic • Simple • Timeless",
-    image: "https://i.pinimg.com/1200x/2b/c4/d1/2bc4d1aa3025e01e5ea116512f102377.jpg",
-    ingredients: [
-        { name: "White or Dark Rum", amount: "50ml" },
-        { name: "Coca-Cola", amount: "150ml" },
-        { name: "Lime", amount: "1 wedge (optional)" },
-        { name: "Ice", amount: "Cubes" }
-    ],
-    instructions: "1. Fill a glass with ice. 2. Pour in the rum. 3. Top with Coca-Cola. 4. Gently stir. 5. Optionally squeeze a lime wedge and drop it in."
-
-
+            id: 8,
+            name: "Frozen Party Slush",
+            tag: "Big Batch • Fun • Slushy",
+            image: "https://i.pinimg.com/736x/28/98/28/28982869538c7013bd558cdaf9f05dc5.jpg",
+            ingredients: [
+                { name: "Piña Colada (can)", amount: "150ml" },
+                { name: "Strawberry Fanta", amount: "150ml" },
+                { name: "Vodka or Malibu", amount: "50ml" },
+                { name: "Ice", amount: "2 cups" }
+            ],
+            instructions: "1. Add ice, piña colada, strawberry Fanta, and vodka or Malibu into a blender. 2. Blend until smooth and slushy. 3. Pour into glasses immediately. 4. Optionally garnish with colorful sprinkles or fruit slices for extra fun."
         },
         {
-
-    id: 11,
-    name: "Куманёк",
-    tag: "Bold • Rustic • Funny",
-    image: "https://i.pinimg.com/736x/c6/ad/29/c6ad297a8290d20893e07c24be3d7212.jpg",
-    ingredients: [
-        { name: "Light Beer", amount: "250ml" },
-        { name: "Vodka", amount: "30ml" },
-        { name: "Ice", amount: "Optional" }
-    ],
-    instructions: "1. Pour cold beer into a large glass. 2. Slowly add vodka. 3. Do not shake. 4. Stir very gently once. 5. Serve immediately while cold."
-
-
+            id: 9,
+            name: "Margarita",
+            tag: "Zesty • Salty • Classic",
+            image: "https://i.pinimg.com/1200x/83/17/ad/8317ad3eed28a28773e98bed3d3aa55b.jpg",
+            ingredients: [
+                { name: "Tequila", amount: "50ml" },
+                { name: "Fresh Lime Juice", amount: "25ml" },
+                { name: "Triple Sec", amount: "20ml" },
+                { name: "Agave Syrup", amount: "15ml" },
+                { name: "Salt", amount: "For rim" }
+            ],
+            instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add tequila, lime juice, triple sec, and agave syrup. 3. Shake well until chilled. 4. Strain into the prepared glass over fresh ice. 5. Garnish with a lime wheel and serve immediately."
         },
-    {
-
-    id: 12,
-    name: "Rum Punch",
-    tag: "Fruity • Tropical • Party",
-    image: "https://i.pinimg.com/736x/ad/8d/d1/ad8dd1ed104b30bdc9a9e26f902ded3b.jpg",
-    ingredients: [
-        { name: "Rum", amount: "60ml" },
-        { name: "Pineapple Juice", amount: "60ml" },
-        { name: "Orange Juice", amount: "60ml" },
-        { name: "Cranberry Juice", amount: "30ml" },
-        { name: "Ice", amount: "Cubes" }
-    ],
-    instructions: "1. Fill a shaker or glass with ice. 2. Add rum, pineapple juice, orange juice, and cranberry juice. 3. Stir or shake lightly. 4. Pour into a glass over ice. 5. Garnish with fruit if available."
-
-
-    },
         {
-    id: 13,
-    name: "Bloody Mary",
-    tag: "Savory • Spicy • Classic",
-    image: "https://i.pinimg.com/736x/7c/e9/e5/7ce9e5f25bb0c957e55a4afb4b3187c6.jpg",
-    ingredients: [
-        { name: "Vodka", amount: "50ml" },
-        { name: "Tomato Juice", amount: "120ml" },
-        { name: "Lemon Juice", amount: "10ml" },
-        { name: "Salt & Pepper", amount: "Pinch" },
-        { name: "Ice", amount: "Cubes" }
-    ],
-    instructions: "1. Fill a glass with ice. 2. Add vodka, tomato juice, and lemon juice. 3. Season with salt and pepper. 4. Stir gently. 5. Garnish if desired and serve cold."
-},
+            id: 10,
+            name: "Coca-Cola & Rum",
+            tag: "Classic • Simple • Timeless",
+            image: "https://i.pinimg.com/1200x/2b/c4/d1/2bc4d1aa3025e01e5ea116512f102377.jpg",
+            ingredients: [
+                { name: "White or Dark Rum", amount: "50ml" },
+                { name: "Coca-Cola", amount: "150ml" },
+                { name: "Lime", amount: "1 wedge (optional)" },
+                { name: "Ice", amount: "Cubes" }
+            ],
+            instructions: "1. Fill a glass with ice. 2. Pour in the rum. 3. Top with Coca-Cola. 4. Gently stir. 5. Optionally squeeze a lime wedge and drop it in."
+        },
         {
-    id: 14,
-    name: "Coffee",
-    tag: "Hot • Simple • Energizing",
-    image: "https://i.pinimg.com/1200x/f8/06/7a/f8067a5ee05e97769d02aca1405dfd75.jpg",
-    ingredients: [
-        { name: "Coffee", amount: "1 cup" },
-        { name: "Sugar", amount: "Optional" },
-        { name: "Milk", amount: "Optional" }
-    ],
-    instructions: "1. Brew hot coffee. 2. Add sugar or milk if desired. 3. Serve immediately while hot."
-},
+            id: 11,
+            name: "Куманёк",
+            tag: "Bold • Rustic • Funny",
+            image: "https://i.pinimg.com/736x/c6/ad/29/c6ad297a8290d20893e07c24be3d7212.jpg",
+            ingredients: [
+                { name: "Light Beer", amount: "250ml" },
+                { name: "Vodka", amount: "30ml" },
+                { name: "Ice", amount: "Optional" }
+            ],
+            instructions: "1. Pour cold beer into a large glass. 2. Slowly add vodka. 3. Do not shake. 4. Stir very gently once. 5. Serve immediately while cold."
+        },
         {
-    id: 15,
-    name: "Tea",
-    tag: "Hot • Calm • Classic",
-    image: "https://i.pinimg.com/1200x/74/eb/11/74eb11bfe223256ca55aeea7c65642f7.jpg",
-    ingredients: [
-        { name: "Tea Bag", amount: "1" },
-        { name: "Hot Water", amount: "250ml" },
-        { name: "Sugar or Honey", amount: "Optional" }
-    ],
-    instructions: "1. Place tea bag in a cup. 2. Pour hot water over it. 3. Let steep for 3–5 minutes. 4. Remove tea bag, sweeten if desired, and serve."
-},
+            id: 12,
+            name: "Rum Punch",
+            tag: "Fruity • Tropical • Party",
+            image: "https://i.pinimg.com/736x/ad/8d/d1/ad8dd1ed104b30bdc9a9e26f902ded3b.jpg",
+            ingredients: [
+                { name: "Rum", amount: "60ml" },
+                { name: "Pineapple Juice", amount: "60ml" },
+                { name: "Orange Juice", amount: "60ml" },
+                { name: "Cranberry Juice", amount: "30ml" },
+                { name: "Ice", amount: "Cubes" }
+            ],
+            instructions: "1. Fill a shaker or glass with ice. 2. Add rum, pineapple juice, orange juice, and cranberry juice. 3. Stir or shake lightly. 4. Pour into a glass over ice. 5. Garnish with fruit if available."
+        },
         {
-    id: 16,
-    name: "Juice",
-    tag: "Fresh • Non-Alcoholic • Choice",
-    image: "https://i.pinimg.com/1200x/2d/62/94/2d62940fe3120a11053d4bf2de408e02.jpg",
-    ingredients: [
-        { name: "Available Juices", amount: "" }
-    ],
-    instructions: "Choose one of the following juices: Grape, Mango, Orange, Apple, Cranberry, Blueberry, Guava, Grenadine."
-}
- 
-        
+            id: 13,
+            name: "Bloody Mary",
+            tag: "Savory • Spicy • Classic",
+            image: "https://i.pinimg.com/736x/7c/e9/e5/7ce9e5f25bb0c957e55a4afb4b3187c6.jpg",
+            ingredients: [
+                { name: "Vodka", amount: "50ml" },
+                { name: "Tomato Juice", amount: "120ml" },
+                { name: "Lemon Juice", amount: "10ml" },
+                { name: "Salt & Pepper", amount: "Pinch" },
+                { name: "Ice", amount: "Cubes" }
+            ],
+            instructions: "1. Fill a glass with ice. 2. Add vodka, tomato juice, and lemon juice. 3. Season with salt and pepper. 4. Stir gently. 5. Garnish if desired and serve cold."
+        },
+        {
+            id: 14,
+            name: "Coffee",
+            tag: "Hot • Simple • Energizing",
+            image: "https://i.pinimg.com/1200x/f8/06/7a/f8067a5ee05e97769d02aca1405dfd75.jpg",
+            ingredients: [
+                { name: "Coffee", amount: "1 cup" },
+                { name: "Sugar", amount: "Optional" },
+                { name: "Milk", amount: "Optional" }
+            ],
+            instructions: "1. Brew hot coffee. 2. Add sugar or milk if desired. 3. Serve immediately while hot."
+        },
+        {
+            id: 15,
+            name: "Tea",
+            tag: "Hot • Calm • Classic",
+            image: "https://i.pinimg.com/1200x/74/eb/11/74eb11bfe223256ca55aeea7c65642f7.jpg",
+            ingredients: [
+                { name: "Tea Bag", amount: "1" },
+                { name: "Hot Water", amount: "250ml" },
+                { name: "Sugar or Honey", amount: "Optional" }
+            ],
+            instructions: "1. Place tea bag in a cup. 2. Pour hot water over it. 3. Let steep for 3–5 minutes. 4. Remove tea bag, sweeten if desired, and serve."
+        },
+        {
+            id: 16,
+            name: "Juice",
+            tag: "Fresh • Non-Alcoholic • Choice",
+            image: "https://i.pinimg.com/1200x/2d/62/94/2d62940fe3120a11053d4bf2de408e02.jpg",
+            ingredients: [
+                { name: "Available Juices", amount: "" }
+            ],
+            instructions: "Choose one of the following juices: Grape, Mango, Orange, Apple, Cranberry, Blueberry, Guava, Grenadine."
+        }
     ];
 
     // Current flipped card
@@ -245,9 +223,21 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
     // Header scroll effect
     const header = document.querySelector('.header');
     
-    // Generate cocktail cards
+    // Generate cocktail cards with translation support
     function generateCocktailCards() {
         const container = document.getElementById('cocktailsContainer');
+        if (!container) return;
+        
+        // Clear existing cards
+        container.innerHTML = '';
+        
+        // Get cocktails in current language
+        const cocktails = originalCocktails.map(cocktail => {
+            if (window.languageManager) {
+                return window.languageManager.translateCocktail(cocktail);
+            }
+            return cocktail;
+        });
         
         cocktails.forEach(cocktail => {
             const card = document.createElement('div');
@@ -265,18 +255,18 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
                         <img src="${cocktail.image}" alt="${cocktail.name}" class="cocktail-image" loading="lazy">
                         <h3 class="cocktail-name">${cocktail.name}</h3>
                         <p class="cocktail-tag">${cocktail.tag}</p>
-                        <p class="flip-hint">Tap to see recipe</p>
+                        <p class="flip-hint" data-i18n="flipHint">Tap to see recipe</p>
                     </div>
                     <div class="card-back">
-                        <h3>${cocktail.name} Recipe</h3>
+                        <h3>${cocktail.name} <span data-i18n="recipeTitle">Recipe</span></h3>
                         <ul class="ingredients-list">
                             ${ingredientsHTML}
                         </ul>
                         <div class="instructions">
-                            <strong>Instructions:</strong>
+                            <strong data-i18n="instructions">Instructions:</strong>
                             <p>${cocktail.instructions}</p>
                         </div>
-                        <p class="flip-hint">Tap to flip back</p>
+                        <p class="flip-hint" data-i18n="flipBackHint">Tap to flip back</p>
                     </div>
                 </div>
             `;
@@ -319,6 +309,11 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
             
             container.appendChild(card);
         });
+        
+        // Translate flip hints
+        if (window.languageManager) {
+            window.languageManager.translatePage();
+        }
     }
 
     // Order form functionality
@@ -330,12 +325,17 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
 
     // Update order preview
     function updateOrderPreview() {
-        const name = document.getElementById('name').value || 'Guest';
+        const name = document.getElementById('name').value || 
+            (window.languageManager ? window.languageManager.t('guest') : 'Guest');
         const drink = drinkSelect.value;
         const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked'))
             .map(cb => {
-                const label = cb.closest('.checkbox-label').querySelector('span:last-child');
-                return label ? label.textContent : '';
+                const label = cb.closest('.checkbox-label');
+                if (label) {
+                    const textSpan = label.querySelector('span:last-child:not(.checkbox-custom)');
+                    return textSpan ? textSpan.textContent : '';
+                }
+                return '';
             })
             .filter(text => text.trim() !== '');
         
@@ -344,28 +344,65 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
         
         let previewHTML = '';
         
-        if (drinkName) {
+        if (drinkName && drinkName !== (window.languageManager ? window.languageManager.t('selectCocktail') : 'Select a cocktail')) {
             previewHTML = `
-                <p><strong>Name:</strong> ${name}</p>
-                <p><strong>Drink:</strong> ${drinkName}</p>
+                <p><strong data-i18n="previewName">Name:</strong> ${name}</p>
+                <p><strong data-i18n="previewDrink">Drink:</strong> ${drinkName}</p>
             `;
             
             if (extras.length > 0) {
-                previewHTML += `<p><strong>Extras:</strong> ${extras.join(', ')}</p>`;
+                previewHTML += `<p><strong data-i18n="previewExtras">Extras:</strong> ${extras.join(', ')}</p>`;
             }
             
             if (instructions) {
-                previewHTML += `<p><strong>Notes:</strong> ${instructions}</p>`;
+                previewHTML += `<p><strong data-i18n="previewNotes">Notes:</strong> ${instructions}</p>`;
             }
         } else {
-            previewHTML = '<p class="preview-placeholder">Select a drink to see preview</p>';
+            previewHTML = `<p class="preview-placeholder" data-i18n="previewPlaceholder">Select a drink to see preview</p>`;
         }
         
         orderPreview.innerHTML = previewHTML;
+        
+        // Translate the preview labels
+        if (window.languageManager) {
+            const previewLabels = orderPreview.querySelectorAll('strong[data-i18n]');
+            previewLabels.forEach(label => {
+                const key = label.getAttribute('data-i18n');
+                label.textContent = window.languageManager.t(key) + ' ';
+            });
+            
+            // Translate placeholder if present
+            const placeholder = orderPreview.querySelector('.preview-placeholder');
+            if (placeholder && placeholder.hasAttribute('data-i18n')) {
+                const key = placeholder.getAttribute('data-i18n');
+                placeholder.textContent = window.languageManager.t(key);
+            }
+        }
     }
 
     // Initialize form listeners
     function initFormListeners() {
+        if (!orderForm) return;
+        
+        // Populate drink select with original cocktail names
+        const cocktailOptions = originalCocktails.map(cocktail => ({
+            value: cocktail.name,
+            text: cocktail.name
+        }));
+        
+        // Clear existing options except the first one
+        while (drinkSelect.options.length > 1) {
+            drinkSelect.remove(1);
+        }
+        
+        // Add cocktail options
+        cocktailOptions.forEach(option => {
+            const optionElement = document.createElement('option');
+            optionElement.value = option.value;
+            optionElement.textContent = option.text;
+            drinkSelect.appendChild(optionElement);
+        });
+        
         // Update preview on any change
         const formInputs = orderForm.querySelectorAll('input, select, textarea');
         formInputs.forEach(input => {
@@ -385,14 +422,26 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
                     .map(cb => cb.value),
                 specialInstructions: document.getElementById('specialInstructions').value,
                 timestamp: new Date().toLocaleString(),
-                status: 'pending'
+                status: 'pending',
+                language: window.languageManager ? window.languageManager.currentLang : 'en'
             };
             
             // Save order to localStorage
             saveOrder(formData);
             
             // Show success modal
-            successModal.style.display = 'flex';
+            if (successModal) {
+                successModal.style.display = 'flex';
+                
+                // Update modal content in current language
+                const modalTitle = successModal.querySelector('h2');
+                const modalMessage = successModal.querySelector('p');
+                const modalButton = successModal.querySelector('.modal-btn');
+                
+                if (modalTitle && window.languageManager) modalTitle.textContent = window.languageManager.t('orderSent');
+                if (modalMessage && window.languageManager) modalMessage.textContent = window.languageManager.t('successMessage');
+                if (modalButton && window.languageManager) modalButton.textContent = window.languageManager.t('continue');
+            }
             
             // Vibrate on mobile if supported
             if (navigator.vibrate) {
@@ -405,7 +454,14 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
                 updateOrderPreview();
                 
                 // Close mobile menu if open
-                mobileNav.classList.remove('active');
+                if (mobileNav) {
+                    mobileNav.classList.remove('active');
+                }
+                
+                // Close modal
+                if (successModal) {
+                    successModal.style.display = 'none';
+                }
             }, 2000);
         });
     }
@@ -425,6 +481,8 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
 
     // Modal functionality
     function initModal() {
+        if (!closeModalBtn || !successModal) return;
+        
         // Close modal on button click
         closeModalBtn.addEventListener('click', () => {
             successModal.style.display = 'none';
@@ -440,6 +498,8 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
 
     // Mobile menu functionality
     function initMobileMenu() {
+        if (!menuToggle || !mobileNav) return;
+        
         menuToggle.addEventListener('click', function(e) {
             e.stopPropagation();
             mobileNav.classList.toggle('active');
@@ -447,7 +507,7 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
         
         // Close menu when clicking outside
         document.addEventListener('click', function(e) {
-            if (!mobileNav.contains(e.target) && !menuToggle.contains(e.target)) {
+            if (mobileNav && !mobileNav.contains(e.target) && menuToggle && !menuToggle.contains(e.target)) {
                 mobileNav.classList.remove('active');
             }
         });
@@ -456,13 +516,17 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
         const navLinks = document.querySelectorAll('.nav-link');
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
-                mobileNav.classList.remove('active');
+                if (mobileNav) {
+                    mobileNav.classList.remove('active');
+                }
             });
         });
     }
 
     // Header scroll effect
     function initHeaderScroll() {
+        if (!header) return;
+        
         let lastScrollTop = 0;
         
         window.addEventListener('scroll', function() {
@@ -479,6 +543,32 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
         });
     }
 
+    // Language change listener
+    function setupLanguageListeners() {
+        document.addEventListener('languageChanged', function(e) {
+            // Regenerate cocktail cards with new language
+            generateCocktailCards();
+            
+            // Update order preview
+            updateOrderPreview();
+            
+            // Update admin button text if exists
+            const adminBtn = document.querySelector('.admin-btn');
+            if (adminBtn && window.languageManager) {
+                adminBtn.innerHTML = `<i class="fas fa-lock-open"></i> ${window.languageManager.t('goToAdmin')}`;
+            }
+            
+            // Update floating button
+            const floatingBtn = document.querySelector('.floating-order-btn span');
+            if (floatingBtn && window.languageManager) {
+                floatingBtn.textContent = window.languageManager.t('orderNow');
+            }
+        });
+    }
+
+    // Make function globally available for language manager
+    window.updateCocktailsWithTranslation = generateCocktailCards;
+
     // Initialize everything
     function init() {
         generateCocktailCards();
@@ -486,6 +576,7 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
         initModal();
         initMobileMenu();
         initHeaderScroll();
+        setupLanguageListeners();
         updateOrderPreview();
         
         // Add touch-friendly class for mobile
@@ -497,9 +588,3 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
     // Start the app
     init();
 });
-
-
-
-
-
-

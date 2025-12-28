@@ -265,7 +265,7 @@ body {
     border-radius: 20px;
     overflow: hidden;
     box-shadow: var(--shadow-md);
-    padding: 25px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
 }
@@ -840,5 +840,6 @@ button, a {
     background: var(--violet);
     border-radius: 3px;
 }
+
 
 

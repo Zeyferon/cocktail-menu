@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Admin password
-    const ADMIN_PASSWORD = "homebar2024";
+    const ADMIN_PASSWORD = "1234";
     let currentOrderId = null;
     
     // DOM Elements
@@ -322,3 +322,4 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(style);
 });
+

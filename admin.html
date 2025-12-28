@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Home Cocktail Bar</title>
+    <link rel="stylesheet" href="admin-style.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Admin Header -->
+        <header class="admin-header">
+            <div class="container">
+                <h1><i class="fas fa-user-shield"></i> Bar Manager Dashboard</h1>
+                <div class="admin-controls">
+                    <a href="index.html" class="back-btn">
+                        <i class="fas fa-arrow-left"></i> Back to Menu
+                    </a>
+                    <button id="refreshOrders" class="refresh-btn">
+                        <i class="fas fa-sync-alt"></i> Refresh Orders
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Admin Content -->
+        <main class="admin-main">
+            <div class="container">
+                <!-- Password Protection -->
+                <div class="password-section" id="passwordSection">
+                    <div class="password-card">
+                        <h2><i class="fas fa-lock"></i> Admin Access</h2>
+                        <p>Enter the bar manager password to view orders</p>
+                        <div class="password-input-group">
+                            <input type="password" id="adminPassword" placeholder="Enter password" autocomplete="off">
+                            <button id="submitPassword" class="password-btn">
+                                <i class="fas fa-unlock"></i> Access Dashboard
+                            </button>
+                        </div>
+                        <p class="password-hint">Hint: The password is in the main page footer</p>
+                    </div>
+                </div>
+
+                <!-- Orders Dashboard (Hidden until authenticated) -->
+                <div class="orders-dashboard" id="ordersDashboard" style="display: none;">
+                    <!-- Statistics Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-glass-martini-alt"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="totalOrders">0</h3>
+                                <p>Total Orders</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="todayOrders">0</h3>
+                                <p>Today's Orders</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="pendingOrders">0</h3>
+                                <p>Pending</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="completedOrders">0</h3>
+                                <p>Completed</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Orders Table -->
+                    <div class="orders-table-container">
+                        <div class="table-header">
+                            <h2><i class="fas fa-clipboard-list"></i> Recent Orders</h2>
+                            <div class="table-actions">
+                                <button id="markComplete" class="action-btn">
+                                    <i class="fas fa-check"></i> Mark Complete
+                                </button>
+                                <button id="clearCompleted" class="action-btn delete">
+                                    <i class="fas fa-trash"></i> Clear Completed
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-wrapper">
+                            <table id="ordersTable">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="selectAll"></th>
+                                        <th>Time</th>
+                                        <th>Name</th>
+                                        <th>Drink</th>
+                                        <th>Extras</th>
+                                        <th>Special Instructions</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTableBody">
+                                    <!-- Orders will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="no-orders" id="noOrdersMessage">
+                            <i class="fas fa-glass-cheers"></i>
+                            <h3>No Orders Yet</h3>
+                            <p>Orders will appear here when customers place them through the menu</p>
+                        </div>
+                    </div>
+
+                    <!-- Order Details Modal -->
+                    <div class="modal" id="orderDetailsModal">
+                        <div class="modal-content">
+                            <span class="close-modal">&times;</span>
+                            <h2><i class="fas fa-file-alt"></i> Order Details</h2>
+                            <div class="order-details-content" id="orderDetailsContent">
+                                <!-- Order details will be loaded here -->
+                            </div>
+                            <div class="modal-actions">
+                                <button class="modal-btn" id="completeOrderBtn">
+                                    <i class="fas fa-check"></i> Mark as Complete
+                                </button>
+                                <button class="modal-btn delete" id="deleteOrderBtn">
+                                    <i class="fas fa-trash"></i> Delete Order
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Admin Footer -->
+        <footer class="admin-footer">
+            <div class="container">
+                <p><i class="fas fa-shield-alt"></i> Secure Admin Panel | Home Cocktail Bar Manager</p>
+                <p class="logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>

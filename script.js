@@ -90,7 +90,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Current flipped card
     let currentFlippedCard = null;
-
+    
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileNav = document.getElementById('mobileNav');
+    
+    // Header scroll effect
+    const header = document.querySelector('.header');
+    
     // Generate cocktail cards
     function generateCocktailCards() {
         const container = document.getElementById('cocktailsContainer');
@@ -108,10 +115,10 @@ document.addEventListener('DOMContentLoaded', function() {
             card.innerHTML = `
                 <div class="card-inner">
                     <div class="card-front">
-                        <img src="${cocktail.image}" alt="${cocktail.name}" class="cocktail-image">
+                        <img src="${cocktail.image}" alt="${cocktail.name}" class="cocktail-image" loading="lazy">
                         <h3 class="cocktail-name">${cocktail.name}</h3>
                         <p class="cocktail-tag">${cocktail.tag}</p>
-                        <p class="flip-hint">Click to see recipe</p>
+                        <p class="flip-hint">Tap to see recipe</p>
                     </div>
                     <div class="card-back">
                         <h3>${cocktail.name} Recipe</h3>
@@ -122,15 +129,18 @@ document.addEventListener('DOMContentLoaded', function() {
                             <strong>Instructions:</strong>
                             <p>${cocktail.instructions}</p>
                         </div>
-                        <p class="flip-hint">Click to flip back</p>
+                        <p class="flip-hint">Tap to flip back</p>
                     </div>
                 </div>
             `;
             
-            // Add click event for flipping
+            // Add touch/click event for flipping
             card.addEventListener('click', function(e) {
-                // Don't flip if clicking on the back's scrollable area
-                if (e.target.closest('.card-back') && e.target.tagName !== 'P' && !e.target.classList.contains('flip-hint')) {
+                // Don't flip if clicking on scrollable content
+                if (e.target.closest('.card-back') && 
+                    e.target.tagName !== 'P' && 
+                    !e.target.classList.contains('flip-hint') &&
+                    !e.target.closest('.flip-hint')) {
                     return;
                 }
                 
@@ -145,9 +155,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Update current flipped card
                 if (this.classList.contains('flipped')) {
                     currentFlippedCard = this;
+                    
+                    // Scroll the flipped card into view on mobile
+                    if (window.innerWidth < 768) {
+                        setTimeout(() => {
+                            this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 300);
+                    }
                 } else {
                     currentFlippedCard = null;
                 }
+                
+                // Close mobile menu if open
+                mobileNav.classList.remove('active');
             });
             
             container.appendChild(card);
@@ -160,29 +180,38 @@ document.addEventListener('DOMContentLoaded', function() {
     const orderPreview = document.getElementById('orderPreview');
     const successModal = document.getElementById('successModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
-    const closeModalX = document.querySelector('.close-modal');
 
     // Update order preview
     function updateOrderPreview() {
         const name = document.getElementById('name').value || 'Guest';
         const drink = drinkSelect.value;
         const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked'))
-            .map(cb => cb.nextElementSibling.textContent);
-        const instructions = document.getElementById('specialInstructions').value;
+            .map(cb => {
+                const label = cb.closest('.checkbox-label').querySelector('span:last-child');
+                return label ? label.textContent : '';
+            })
+            .filter(text => text.trim() !== '');
         
+        const instructions = document.getElementById('specialInstructions').value;
         const drinkName = drinkSelect.options[drinkSelect.selectedIndex].text;
         
-        let previewHTML = `
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Drink:</strong> ${drinkName || 'Not selected'}</p>
-        `;
+        let previewHTML = '';
         
-        if (extras.length > 0) {
-            previewHTML += `<p><strong>Extras:</strong> ${extras.join(', ')}</p>`;
-        }
-        
-        if (instructions) {
-            previewHTML += `<p><strong>Special Instructions:</strong> ${instructions}</p>`;
+        if (drinkName) {
+            previewHTML = `
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Drink:</strong> ${drinkName}</p>
+            `;
+            
+            if (extras.length > 0) {
+                previewHTML += `<p><strong>Extras:</strong> ${extras.join(', ')}</p>`;
+            }
+            
+            if (instructions) {
+                previewHTML += `<p><strong>Notes:</strong> ${instructions}</p>`;
+            }
+        } else {
+            previewHTML = '<p class="preview-placeholder">Select a drink to see preview</p>';
         }
         
         orderPreview.innerHTML = previewHTML;
@@ -208,55 +237,116 @@ document.addEventListener('DOMContentLoaded', function() {
                 extras: Array.from(document.querySelectorAll('input[name="extras"]:checked'))
                     .map(cb => cb.value),
                 specialInstructions: document.getElementById('specialInstructions').value,
-                timestamp: new Date().toLocaleString()
+                timestamp: new Date().toLocaleString(),
+                status: 'pending'
             };
             
-            // Save order to localStorage (simulating server storage)
+            // Save order to localStorage
             saveOrder(formData);
             
             // Show success modal
             successModal.style.display = 'flex';
             
-            // Reset form
-            orderForm.reset();
-            updateOrderPreview();
+            // Vibrate on mobile if supported
+            if (navigator.vibrate) {
+                navigator.vibrate(100);
+            }
+            
+            // Reset form after a delay
+            setTimeout(() => {
+                orderForm.reset();
+                updateOrderPreview();
+                
+                // Close mobile menu if open
+                mobileNav.classList.remove('active');
+            }, 2000);
         });
     }
 
     // Save order to localStorage
     function saveOrder(order) {
         let orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
+        
+        // Add unique ID
+        order.id = Date.now();
         orders.push(order);
         localStorage.setItem('cocktailOrders', JSON.stringify(orders));
         
-        // Log to console (for demo)
-        console.log('New Order:', order);
-        console.log('All Orders:', orders);
+        // Log for debugging
+        console.log('New Order Saved:', order);
     }
 
     // Modal functionality
     function initModal() {
-        // Close modal on X click
-        closeModalX.addEventListener('click', () => {
-            successModal.style.display = 'none';
-        });
-        
         // Close modal on button click
         closeModalBtn.addEventListener('click', () => {
             successModal.style.display = 'none';
         });
         
         // Close modal on outside click
-        window.addEventListener('click', (e) => {
+        successModal.addEventListener('click', (e) => {
             if (e.target === successModal) {
                 successModal.style.display = 'none';
             }
         });
     }
 
+    // Mobile menu functionality
+    function initMobileMenu() {
+        menuToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            mobileNav.classList.toggle('active');
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!mobileNav.contains(e.target) && !menuToggle.contains(e.target)) {
+                mobileNav.classList.remove('active');
+            }
+        });
+        
+        // Close menu when clicking a link
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNav.classList.remove('active');
+            });
+        });
+    }
+
+    // Header scroll effect
+    function initHeaderScroll() {
+        let lastScrollTop = 0;
+        
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Add/remove scrolled class based on scroll position
+            if (scrollTop > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            lastScrollTop = scrollTop;
+        });
+    }
+
     // Initialize everything
-    generateCocktailCards();
-    initFormListeners();
-    initModal();
-    updateOrderPreview();
+    function init() {
+        generateCocktailCards();
+        initFormListeners();
+        initModal();
+        initMobileMenu();
+        initHeaderScroll();
+        updateOrderPreview();
+        
+        // Add touch-friendly class for mobile
+        if ('ontouchstart' in window) {
+            document.body.classList.add('touch-device');
+        }
+    }
+
+    // Start the app
+    init();
 });

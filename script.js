@@ -182,8 +182,56 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
     instructions: "1. Fill a shaker or glass with ice. 2. Add rum, pineapple juice, orange juice, and cranberry juice. 3. Stir or shake lightly. 4. Pour into a glass over ice. 5. Garnish with fruit if available."
 
 
-    }
-        
+    },
+        {
+    id: 13,
+    name: "Bloody Mary",
+    tag: "Savory • Spicy • Classic",
+    image: "https://images.unsplash.com/photo-1604908554026-0b5b9e3a5a3d?w=400&h=400&fit=crop",
+    ingredients: [
+        { name: "Vodka", amount: "50ml" },
+        { name: "Tomato Juice", amount: "120ml" },
+        { name: "Lemon Juice", amount: "10ml" },
+        { name: "Salt & Pepper", amount: "Pinch" },
+        { name: "Ice", amount: "Cubes" }
+    ],
+    instructions: "1. Fill a glass with ice. 2. Add vodka, tomato juice, and lemon juice. 3. Season with salt and pepper. 4. Stir gently. 5. Garnish if desired and serve cold."
+},
+        {
+    id: 14,
+    name: "Coffee",
+    tag: "Hot • Simple • Energizing",
+    image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=400&fit=crop",
+    ingredients: [
+        { name: "Coffee", amount: "1 cup" },
+        { name: "Sugar", amount: "Optional" },
+        { name: "Milk", amount: "Optional" }
+    ],
+    instructions: "1. Brew hot coffee. 2. Add sugar or milk if desired. 3. Serve immediately while hot."
+},
+        {
+    id: 15,
+    name: "Tea",
+    tag: "Hot • Calm • Classic",
+    image: "https://images.unsplash.com/photo-1518976024611-488f3f7b1f89?w=400&h=400&fit=crop",
+    ingredients: [
+        { name: "Tea Bag", amount: "1" },
+        { name: "Hot Water", amount: "250ml" },
+        { name: "Sugar or Honey", amount: "Optional" }
+    ],
+    instructions: "1. Place tea bag in a cup. 2. Pour hot water over it. 3. Let steep for 3–5 minutes. 4. Remove tea bag, sweeten if desired, and serve."
+},
+        {
+    id: 16,
+    name: "Juice",
+    tag: "Fresh • Non-Alcoholic • Choice",
+    image: "https://images.unsplash.com/photo-1571687949921-1306bfb24b72?w=400&h=400&fit=crop",
+    ingredients: [
+        { name: "Available Juices", amount: "" }
+    ],
+    instructions: "Choose one of the following juices: Grape, Mango, Orange, Apple, Cranberry, Blueberry, Guava, Grenadine."
+}
+ 
         
     ];
 
@@ -449,6 +497,7 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
     // Start the app
     init();
 });
+
 
 
 

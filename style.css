@@ -265,7 +265,7 @@ body {
     border-radius: 20px;
     overflow: hidden;
     box-shadow: var(--shadow-md);
-    padding: 10px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
 }
@@ -289,7 +289,7 @@ body {
 /* Card Content */
 .cocktail-image {
     width: 100%;           /* fills card width */
-    height: 180px;         /* fixed height or adjust as needed */
+    height: 120px;         /* fixed height or adjust as needed */
     border-radius: 0;      /* rectangular */
     object-fit: cover;     /* fills box without stretching */
     margin-bottom: 15px;   /* space below image */
@@ -840,6 +840,7 @@ button, a {
     background: var(--violet);
     border-radius: 3px;
 }
+
 
 
 

@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Admin password (in real app, this would be server-side)
-    const ADMIN_PASSWORD = "1234";
+    // Admin password
+    const ADMIN_PASSWORD = "homebar2024";
     let currentOrderId = null;
     
     // DOM Elements
@@ -10,15 +10,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitPasswordBtn = document.getElementById('submitPassword');
     const logoutBtn = document.getElementById('logoutBtn');
     const refreshOrdersBtn = document.getElementById('refreshOrders');
-    const ordersTableBody = document.getElementById('ordersTableBody');
+    const ordersList = document.getElementById('ordersList');
     const noOrdersMessage = document.getElementById('noOrdersMessage');
     const orderDetailsModal = document.getElementById('orderDetailsModal');
     const orderDetailsContent = document.getElementById('orderDetailsContent');
     const completeOrderBtn = document.getElementById('completeOrderBtn');
     const deleteOrderBtn = document.getElementById('deleteOrderBtn');
-    const markCompleteBtn = document.getElementById('markComplete');
     const clearCompletedBtn = document.getElementById('clearCompleted');
-    const selectAllCheckbox = document.getElementById('selectAll');
+    const closeModalBtn = document.querySelector('.close-modal');
     const stats = {
         totalOrders: document.getElementById('totalOrders'),
         todayOrders: document.getElementById('todayOrders'),
@@ -46,14 +45,20 @@ document.addEventListener('DOMContentLoaded', function() {
             ordersDashboard.style.display = 'block';
             adminPasswordInput.value = '';
             loadOrders();
+            
+            // Vibrate on success
+            if (navigator.vibrate) navigator.vibrate(100);
         } else {
-            alert('Incorrect password! Please try again.');
+            alert('Incorrect password!');
             adminPasswordInput.value = '';
             adminPasswordInput.focus();
+            
+            // Vibrate on error
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
         }
     });
     
-    // Allow Enter key for password submission
+    // Allow Enter key for password
     adminPasswordInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             submitPasswordBtn.click();
@@ -71,20 +76,22 @@ document.addEventListener('DOMContentLoaded', function() {
     function loadOrders() {
         let orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
         
-        // Add status to orders if not present
+        // Ensure all orders have required fields
         orders = orders.map((order, index) => {
-            if (!order.status) {
-                order.status = 'pending';
-                order.id = index + 1;
-            }
+            if (!order.id) order.id = Date.now() + index;
+            if (!order.status) order.status = 'pending';
             return order;
         });
         
-        // Save back with status
-        localStorage.setItem('cocktailOrders', JSON.stringify(orders));
+        // Sort by time (newest first)
+        orders.sort((a, b) => {
+            const timeA = new Date(a.timestamp || 0).getTime();
+            const timeB = new Date(b.timestamp || 0).getTime();
+            return timeB - timeA;
+        });
         
         updateStatistics(orders);
-        renderOrdersTable(orders);
+        renderOrdersList(orders);
     }
     
     // Update statistics
@@ -103,64 +110,90 @@ document.addEventListener('DOMContentLoaded', function() {
         stats.completedOrders.textContent = completedCount;
     }
     
-    // Render orders table
-    function renderOrdersTable(orders) {
+    // Render orders list for mobile
+    function renderOrdersList(orders) {
         if (orders.length === 0) {
             noOrdersMessage.style.display = 'block';
-            ordersTableBody.innerHTML = '';
+            ordersList.innerHTML = '';
             return;
         }
         
         noOrdersMessage.style.display = 'none';
         
-        // Sort by timestamp (newest first)
-        orders.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+        const listHTML = orders.map(order => {
+            // Get first letter for avatar
+            const firstLetter = order.name ? order.name.charAt(0).toUpperCase() : 'G';
+            
+            // Format time
+            const time = order.timestamp ? 
+                new Date(order.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 
+                '--:--';
+            
+            return `
+                <div class="order-item ${order.status}" data-order-id="${order.id}" onclick="viewOrderDetails(${order.id})">
+                    <div class="order-header">
+                        <div class="order-customer">
+                            <div class="customer-avatar">${firstLetter}</div>
+                            <div class="customer-info">
+                                <h3>${order.name || 'Guest'}</h3>
+                                <p class="order-time">${time}</p>
+                            </div>
+                        </div>
+                        <span class="order-status ${order.status}">${order.status}</span>
+                    </div>
+                    <div class="order-details-preview">
+                        <p><i class="fas fa-glass-martini-alt"></i> ${order.drink || 'No drink specified'}</p>
+                        ${order.extras && order.extras.length > 0 ? 
+                            `<p><i class="fas fa-plus-circle"></i> ${order.extras.length} extras</p>` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
         
-        const tableHTML = orders.map((order, index) => `
-            <tr data-order-id="${order.id || index}">
-                <td><input type="checkbox" class="order-checkbox" data-order-id="${order.id || index}"></td>
-                <td>${order.timestamp || 'Unknown time'}</td>
-                <td><strong>${order.name || 'Guest'}</strong></td>
-                <td>${order.drink || 'Not specified'}</td>
-                <td>${order.extras ? order.extras.join(', ') : 'None'}</td>
-                <td>${order.specialInstructions || 'None'}</td>
-                <td><span class="status ${order.status || 'pending'}">${order.status || 'pending'}</span></td>
-                <td class="action-cell">
-                    <button class="view-btn" onclick="viewOrderDetails(${order.id || index})">
-                        <i class="fas fa-eye"></i> View
-                    </button>
-                    ${order.status !== 'completed' ? `
-                        <button class="complete-btn" onclick="markOrderComplete(${order.id || index})">
-                            <i class="fas fa-check"></i> Complete
-                        </button>
-                    ` : ''}
-                </td>
-            </tr>
-        `).join('');
-        
-        ordersTableBody.innerHTML = tableHTML;
+        ordersList.innerHTML = listHTML;
     }
     
     // View order details
-    window.viewOrderDetails = function(orderIndex) {
+    window.viewOrderDetails = function(orderId) {
         const orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
-        const order = orders.find(o => o.id === orderIndex) || orders[orderIndex];
+        const order = orders.find(o => o.id === orderId);
         
         if (!order) {
             alert('Order not found!');
             return;
         }
         
-        currentOrderId = order.id || orderIndex;
+        currentOrderId = orderId;
         
         const detailsHTML = `
-            <h3>Order #${currentOrderId}</h3>
-            <p><strong>Customer Name:</strong> ${order.name || 'Guest'}</p>
-            <p><strong>Order Time:</strong> ${order.timestamp || 'Unknown'}</p>
-            <p><strong>Drink:</strong> ${order.drink || 'Not specified'}</p>
-            <p><strong>Extras:</strong> ${order.extras ? order.extras.join(', ') : 'None'}</p>
-            <p><strong>Special Instructions:</strong> ${order.specialInstructions || 'None'}</p>
-            <p><strong>Status:</strong> <span class="status ${order.status || 'pending'}">${order.status || 'pending'}</span></p>
+            <p>
+                <strong>Order ID:</strong> 
+                <span>#${order.id}</span>
+            </p>
+            <p>
+                <strong>Customer:</strong> 
+                <span>${order.name || 'Guest'}</span>
+            </p>
+            <p>
+                <strong>Time:</strong> 
+                <span>${order.timestamp || 'Unknown'}</span>
+            </p>
+            <p>
+                <strong>Drink:</strong> 
+                <span>${order.drink || 'Not specified'}</span>
+            </p>
+            <p>
+                <strong>Extras:</strong> 
+                <span>${order.extras && order.extras.length > 0 ? order.extras.join(', ') : 'None'}</span>
+            </p>
+            <p>
+                <strong>Instructions:</strong> 
+                <span>${order.specialInstructions || 'None'}</span>
+            </p>
+            <p>
+                <strong>Status:</strong> 
+                <span class="status ${order.status}">${order.status}</span>
+            </p>
         `;
         
         orderDetailsContent.innerHTML = detailsHTML;
@@ -168,33 +201,33 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // Mark order as complete
-    window.markOrderComplete = function(orderIndex) {
+    completeOrderBtn.addEventListener('click', function() {
+        if (!currentOrderId) return;
+        
         if (!confirm('Mark this order as complete?')) return;
         
         const orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
-        const order = orders.find(o => o.id === orderIndex) || orders[orderIndex];
+        const orderIndex = orders.findIndex(o => o.id === currentOrderId);
         
-        if (order) {
-            order.status = 'completed';
+        if (orderIndex !== -1) {
+            orders[orderIndex].status = 'completed';
             localStorage.setItem('cocktailOrders', JSON.stringify(orders));
+            
+            // Close modal
+            orderDetailsModal.style.display = 'none';
+            
+            // Reload orders
             loadOrders();
             
-            // Close modal if open
-            if (orderDetailsModal.style.display === 'flex' && currentOrderId === (order.id || orderIndex)) {
-                orderDetailsModal.style.display = 'none';
-            }
-        }
-    };
-    
-    // Complete order from modal
-    completeOrderBtn.addEventListener('click', function() {
-        if (currentOrderId !== null) {
-            window.markOrderComplete(currentOrderId);
+            // Vibrate on success
+            if (navigator.vibrate) navigator.vibrate(100);
         }
     });
     
-    // Delete order from modal
+    // Delete order
     deleteOrderBtn.addEventListener('click', function() {
+        if (!currentOrderId) return;
+        
         if (!confirm('Are you sure you want to delete this order?')) return;
         
         const orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
@@ -203,32 +236,9 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('cocktailOrders', JSON.stringify(filteredOrders));
         orderDetailsModal.style.display = 'none';
         loadOrders();
-    });
-    
-    // Mark selected orders as complete
-    markCompleteBtn.addEventListener('click', function() {
-        const checkboxes = document.querySelectorAll('.order-checkbox:checked');
         
-        if (checkboxes.length === 0) {
-            alert('Please select orders to mark as complete');
-            return;
-        }
-        
-        if (!confirm(`Mark ${checkboxes.length} order(s) as complete?`)) return;
-        
-        const orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
-        
-        checkboxes.forEach(checkbox => {
-            const orderId = parseInt(checkbox.dataset.orderId);
-            const order = orders.find(o => o.id === orderId);
-            if (order) {
-                order.status = 'completed';
-            }
-        });
-        
-        localStorage.setItem('cocktailOrders', JSON.stringify(orders));
-        loadOrders();
-        selectAllCheckbox.checked = false;
+        // Vibrate on delete
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
     });
     
     // Clear completed orders
@@ -245,31 +255,70 @@ document.addEventListener('DOMContentLoaded', function() {
         
         localStorage.setItem('cocktailOrders', JSON.stringify(pendingOrders));
         loadOrders();
-    });
-    
-    // Select all checkbox
-    selectAllCheckbox.addEventListener('change', function() {
-        const checkboxes = document.querySelectorAll('.order-checkbox');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = selectAllCheckbox.checked;
-        });
+        
+        // Vibrate on clear
+        if (navigator.vibrate) navigator.vibrate([100, 30, 100, 30, 100]);
     });
     
     // Refresh orders
-    refreshOrdersBtn.addEventListener('click', loadOrders);
+    refreshOrdersBtn.addEventListener('click', function() {
+        loadOrders();
+        
+        // Add refresh animation
+        this.classList.add('refreshing');
+        setTimeout(() => {
+            this.classList.remove('refreshing');
+        }, 500);
+        
+        // Vibrate
+        if (navigator.vibrate) navigator.vibrate(50);
+    });
     
     // Modal close functionality
-    const closeModalBtn = document.querySelector('#orderDetailsModal .close-modal');
     closeModalBtn.addEventListener('click', () => {
         orderDetailsModal.style.display = 'none';
+        currentOrderId = null;
     });
     
     window.addEventListener('click', (e) => {
         if (e.target === orderDetailsModal) {
             orderDetailsModal.style.display = 'none';
+            currentOrderId = null;
+        }
+    });
+    
+    // Keyboard shortcuts for admin
+    document.addEventListener('keydown', (e) => {
+        // Refresh with R key
+        if (e.key === 'r' || e.key === 'R') {
+            if (ordersDashboard.style.display === 'block') {
+                refreshOrdersBtn.click();
+            }
+        }
+        
+        // Escape to close modal
+        if (e.key === 'Escape') {
+            if (orderDetailsModal.style.display === 'flex') {
+                orderDetailsModal.style.display = 'none';
+                currentOrderId = null;
+            }
         }
     });
     
     // Initialize
     checkAuth();
+    
+    // Add CSS for refresh animation
+    const style = document.createElement('style');
+    style.textContent = `
+        .refreshing {
+            animation: spin 0.5s ease;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
 });

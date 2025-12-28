@@ -136,7 +136,7 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
         },
 
         {
-{
+
     id: 10,
     name: "Coca-Cola & Rum",
     tag: "Classic • Simple • Timeless",
@@ -148,11 +148,11 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
         { name: "Ice", amount: "Cubes" }
     ],
     instructions: "1. Fill a glass with ice. 2. Pour in the rum. 3. Top with Coca-Cola. 4. Gently stir. 5. Optionally squeeze a lime wedge and drop it in."
-}
+
 
         },
         {
-{
+
     id: 11,
     name: "Куманёк",
     tag: "Bold • Rustic • Funny",
@@ -163,11 +163,11 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
         { name: "Ice", amount: "Optional" }
     ],
     instructions: "1. Pour cold beer into a large glass. 2. Slowly add vodka. 3. Do not shake. 4. Stir very gently once. 5. Serve immediately while cold."
-}
+
 
         },
-                          {
-{
+    {
+
     id: 12,
     name: "Rum Punch",
     tag: "Fruity • Tropical • Party",
@@ -180,9 +180,9 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
         { name: "Ice", amount: "Cubes" }
     ],
     instructions: "1. Fill a shaker or glass with ice. 2. Add rum, pineapple juice, orange juice, and cranberry juice. 3. Stir or shake lightly. 4. Pour into a glass over ice. 5. Garnish with fruit if available."
-}
 
-                          }
+
+    }
         
         
     ];
@@ -449,6 +449,7 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
     // Start the app
     init();
 });
+
 
 
 

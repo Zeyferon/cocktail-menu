@@ -133,7 +133,58 @@ ingredients: [
 instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add tequila, lime juice, triple sec, and agave syrup. 3. Shake well until chilled. 4. Strain into the prepared glass over fresh ice. 5. Garnish with a lime wheel and serve immediately."
 
 
-        }
+        },
+
+        {
+{
+    id: 10,
+    name: "Coca-Cola & Rum",
+    tag: "Classic • Simple • Timeless",
+    image: "https://images.unsplash.com/photo-1626197031507-c17099753214?w=400&h=400&fit=crop",
+    ingredients: [
+        { name: "White or Dark Rum", amount: "50ml" },
+        { name: "Coca-Cola", amount: "150ml" },
+        { name: "Lime", amount: "1 wedge (optional)" },
+        { name: "Ice", amount: "Cubes" }
+    ],
+    instructions: "1. Fill a glass with ice. 2. Pour in the rum. 3. Top with Coca-Cola. 4. Gently stir. 5. Optionally squeeze a lime wedge and drop it in."
+}
+
+        },
+        {
+{
+    id: 11,
+    name: "Куманёк",
+    tag: "Bold • Rustic • Funny",
+    image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400&h=400&fit=crop",
+    ingredients: [
+        { name: "Light Beer", amount: "250ml" },
+        { name: "Vodka", amount: "30ml" },
+        { name: "Ice", amount: "Optional" }
+    ],
+    instructions: "1. Pour cold beer into a large glass. 2. Slowly add vodka. 3. Do not shake. 4. Stir very gently once. 5. Serve immediately while cold."
+}
+
+        },
+                          {
+{
+    id: 12,
+    name: "Rum Punch",
+    tag: "Fruity • Tropical • Party",
+    image: "https://images.unsplash.com/photo-1582571352032-448f7928eca5?w=400&h=400&fit=crop",
+    ingredients: [
+        { name: "Rum", amount: "60ml" },
+        { name: "Pineapple Juice", amount: "60ml" },
+        { name: "Orange Juice", amount: "60ml" },
+        { name: "Cranberry Juice", amount: "30ml" },
+        { name: "Ice", amount: "Cubes" }
+    ],
+    instructions: "1. Fill a shaker or glass with ice. 2. Add rum, pineapple juice, orange juice, and cranberry juice. 3. Stir or shake lightly. 4. Pour into a glass over ice. 5. Garnish with fruit if available."
+}
+
+                          }
+        
+        
     ];
 
     // Current flipped card
@@ -398,4 +449,5 @@ instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add teq
     // Start the app
     init();
 });
+
 

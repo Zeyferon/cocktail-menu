@@ -3,88 +3,136 @@ document.addEventListener('DOMContentLoaded', function() {
     const cocktails = [
         {
             id: 1,
-            name: "Mojito",
-            tag: "Refreshing & Minty",
-            image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=400&h=400&fit=crop",
-            ingredients: [
-                { name: "White Rum", amount: "50ml" },
-                { name: "Fresh Lime Juice", amount: "25ml" },
-                { name: "Mint Leaves", amount: "10 leaves" },
-                { name: "Sugar Syrup", amount: "20ml" },
-                { name: "Soda Water", amount: "Top up" },
-                { name: "Ice", amount: "Crushed" }
-            ],
-            instructions: "1. Muddle mint leaves with sugar syrup and lime juice. 2. Add rum and crushed ice. 3. Top with soda water. 4. Garnish with mint sprig and lime wheel."
+name: "Strawberry Banana Cream",
+tag: "Creamy • Tropical • Sweet",
+image: "https://i.pinimg.com/1200x/ee/73/34/ee733440c7506d18690696123a608211.jpg",
+ingredients: [
+    { name: "Vodka", amount: "50ml" },
+    { name: "Banana", amount: "1 whole" },
+    { name: "Strawberries", amount: "100g" },
+    { name: "Piña Colada", amount: "150ml" },
+    { name: "Ice", amount: "1 cup" }
+],
+instructions: "1. Add banana and strawberries to the blender and blend until smooth. 2. Add piña colada and ice, then blend again until creamy. 3. Add vodka last and pulse lightly to combine. 4. Pour into a chilled glass and garnish with sugar or colorful sprinkles."
+
         },
         {
-            id: 2,
-            name: "Cosmopolitan",
-            tag: "Classic & Fruity",
-            image: "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=400&h=400&fit=crop",
-            ingredients: [
-                { name: "Vodka", amount: "45ml" },
-                { name: "Triple Sec", amount: "15ml" },
-                { name: "Cranberry Juice", amount: "30ml" },
-                { name: "Lime Juice", amount: "15ml" },
-                { name: "Ice", amount: "Cubes" }
-            ],
-            instructions: "1. Shake all ingredients with ice. 2. Strain into chilled cocktail glass. 3. Garnish with lime twist or orange peel."
+           id: 2,
+name: "Blue Pineapple Lagoon",
+tag: "Tropical • Electric • Refreshing",
+image: "https://i.pinimg.com/736x/7b/d9/74/7bd97494a9fe81f3e295722e07613425.jpg",
+ingredients: [
+    { name: "Vodka", amount: "50ml" },
+    { name: "Pineapple Juice", amount: "120ml" },
+    { name: "Blue Curaçao", amount: "20ml" },
+    { name: "Ice", amount: "Cubes" },
+    { name: "Ginger Ale", amount: "Optional top" }
+],
+instructions: "1. Fill a shaker with ice, then add vodka and pineapple juice. 2. Shake well and strain into an ice-filled glass. 3. Slowly pour blue curaçao on top to create a layered effect. 4. Optionally top with ginger ale and serve immediately."
+
         },
         {
-            id: 3,
-            name: "Old Fashioned",
-            tag: "Strong & Bold",
-            image: "https://images.unsplash.com/photo-1585621386287-5e439b7bed71?w=400&h=400&fit=crop",
-            ingredients: [
-                { name: "Bourbon Whiskey", amount: "60ml" },
-                { name: "Sugar Cube", amount: "1 piece" },
-                { name: "Angostura Bitters", amount: "3 dashes" },
-                { name: "Orange Peel", amount: "1 twist" },
-                { name: "Ice", amount: "Large cube" }
-            ],
-            instructions: "1. Muddle sugar cube with bitters. 2. Add whiskey and ice. 3. Stir gently for 30 seconds. 4. Express orange peel over drink and use as garnish."
+           id: 3,
+name: "Malibu Sunset",
+tag: "Sweet • Tropical • Smooth",
+image: "https://i.pinimg.com/1200x/89/f6/8d/89f68d5c8fcf8c87295738e9b4097c86.jpg",
+ingredients: [
+    { name: "Malibu", amount: "50ml" },
+    { name: "Orange Juice", amount: "120ml" },
+    { name: "Strawberry Fanta", amount: "Top up" },
+    { name: "Ice", amount: "Cubes" }
+],
+instructions: "1. Fill a tall glass with ice. 2. Pour in Malibu. 3. Fill with orange juice. 4. Gently top with strawberry Fanta to create a sunset effect. 5. Do not stir and serve immediately."
+
         },
         {
             id: 4,
-            name: "Margarita",
-            tag: "Zesty & Salty",
-            image: "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=400&h=400&fit=crop",
-            ingredients: [
-                { name: "Tequila", amount: "50ml" },
-                { name: "Lime Juice", amount: "25ml" },
-                { name: "Triple Sec", amount: "20ml" },
-                { name: "Agave Syrup", amount: "15ml" },
-                { name: "Salt", amount: "For rim" }
-            ],
-            instructions: "1. Rim glass with salt. 2. Shake all ingredients with ice. 3. Strain into glass over fresh ice. 4. Garnish with lime wheel."
+name: "Mango Guava Vodka Smash",
+tag: "Fresh • Juicy • Tropical",
+image: "https://i.pinimg.com/1200x/81/89/6d/81896d52dc3cf64dd4fe42d2f483c432.jpg",
+ingredients: [
+    { name: "Vodka", amount: "50ml" },
+    { name: "Mango Juice", amount: "80ml" },
+    { name: "Guava Juice", amount: "80ml" },
+    { name: "Fresh Lime Juice", amount: "20ml" },
+    { name: "Ice", amount: "Cubes" }
+],
+instructions: "1. Fill a shaker with ice. 2. Add vodka, mango juice, guava juice, and lime juice. 3. Shake well until chilled. 4. Strain into a glass over ice. 5. Optionally garnish with a lime wedge or sugar rim."
+
         },
         {
             id: 5,
-            name: "Espresso Martini",
-            tag: "Coffee & Creamy",
-            image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=400&fit=crop",
-            ingredients: [
-                { name: "Vodka", amount: "50ml" },
-                { name: "Coffee Liqueur", amount: "30ml" },
-                { name: "Fresh Espresso", amount: "30ml" },
-                { name: "Simple Syrup", amount: "10ml" },
-                { name: "Coffee Beans", amount: "3 for garnish" }
-            ],
-            instructions: "1. Shake all ingredients vigorously with ice. 2. Strain into chilled martini glass. 3. Garnish with three coffee beans floating on top."
+name: "Green Apple Fizz",
+tag: "Fresh • Fizzy • Aesthetic",
+image: "https://i.pinimg.com/1200x/fa/dd/1e/fadd1e9427bfa1c5e7daf926a5146694.jpg",
+ingredients: [
+    { name: "Vodka", amount: "50ml" },
+    { name: "Green Apple", amount: "1/2, muddled" },
+    { name: "Apple Juice", amount: "100ml" },
+    { name: "Ginger Ale", amount: "Top up" },
+    { name: "Ice", amount: "Cubes" }
+],
+instructions: "1. Muddle the green apple in a shaker. 2. Add vodka, apple juice, and ice. 3. Shake well and strain into a glass filled with ice. 4. Top with ginger ale. 5. Optionally garnish with green sprinkles or apple slice."
+
         },
         {
-            id: 6,
-            name: "Piña Colada",
-            tag: "Tropical & Creamy",
-            image: "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=400&h=400&fit=crop",
-            ingredients: [
-                { name: "White Rum", amount: "60ml" },
-                { name: "Pineapple Juice", amount: "90ml" },
-                { name: "Coconut Cream", amount: "30ml" },
-                { name: "Crushed Ice", amount: "1 cup" },
-                { name: "Pineapple Wedge", amount: "For garnish" }
-            ],
-            instructions: "1. Blend all ingredients with crushed ice until smooth. 2. Pour into hurricane glass. 3. Garnish with pineapple wedge and cherry."
+           id: 6,
+name: "Purple Galaxy",
+tag: "Sweet • Smooth • Vibrant",
+image: "https://i.pinimg.com/736x/9c/5f/a6/9c5fa6ed9307025082e35824f044ba0b.jpg",
+ingredients: [
+    { name: "Vodka", amount: "50ml" },
+    { name: "Grape Juice", amount: "60ml" },
+    { name: "Blueberry Juice", amount: "60ml" },
+    { name: "Cranberry Juice", amount: "Splash" },
+    { name: "Ice", amount: "Cubes" }
+],
+instructions: "1. Fill a shaker with ice. 2. Add vodka, grape juice, blueberry juice, and a splash of cranberry juice. 3. Shake well until chilled. 4. Strain into a glass over fresh ice. 5. Serve immediately and optionally garnish with berries."
+
+        },
+        {
+        id: 7,
+name: "Watermelon Mojito Remix",
+tag: "Refreshing • Fruity • Light",
+image: "https://i.pinimg.com/736x/4f/32/e8/4f32e86b53c3d581b610d6c71c392403.jpg",
+ingredients: [
+    { name: "Vodka", amount: "50ml" },
+    { name: "Watermelon Mojito (can)", amount: "120ml" },
+    { name: "Fresh Lime Juice", amount: "15ml" },
+    { name: "Ice", amount: "Cubes" }
+],
+instructions: "1. Fill a glass with ice. 2. Pour in vodka and watermelon mojito. 3. Add fresh lime juice. 4. Lightly stir to combine. 5. Serve immediately, optionally garnish with a lime wedge."
+
+},
+        {
+id: 8,
+name: "Frozen Party Slush",
+tag: "Big Batch • Fun • Slushy",
+image: "https://i.pinimg.com/736x/28/98/28/28982869538c7013bd558cdaf9f05dc5.jpg",
+ingredients: [
+    { name: "Piña Colada (can)", amount: "150ml" },
+    { name: "Strawberry Fanta", amount: "150ml" },
+    { name: "Vodka or Malibu", amount: "50ml" },
+    { name: "Ice", amount: "2 cups" }
+],
+instructions: "1. Add ice, piña colada, strawberry Fanta, and vodka or Malibu into a blender. 2. Blend until smooth and slushy. 3. Pour into glasses immediately. 4. Optionally garnish with colorful sprinkles or fruit slices for extra fun."
+
+        },
+        {
+id: 9,
+name: "Margarita",
+tag: "Zesty • Salty • Classic",
+image: "https://i.pinimg.com/1200x/83/17/ad/8317ad3eed28a28773e98bed3d3aa55b.jpg",
+ingredients: [
+    { name: "Tequila", amount: "50ml" },
+    { name: "Fresh Lime Juice", amount: "25ml" },
+    { name: "Triple Sec", amount: "20ml" },
+    { name: "Agave Syrup", amount: "15ml" },
+    { name: "Salt", amount: "For rim" }
+],
+instructions: "1. Rim a glass with salt. 2. Fill a shaker with ice, then add tequila, lime juice, triple sec, and agave syrup. 3. Shake well until chilled. 4. Strain into the prepared glass over fresh ice. 5. Garnish with a lime wheel and serve immediately."
+
+
         }
     ];
 
@@ -350,3 +398,4 @@ document.addEventListener('DOMContentLoaded', function() {
     // Start the app
     init();
 });
+

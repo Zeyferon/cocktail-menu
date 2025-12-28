@@ -288,14 +288,16 @@ body {
 
 /* Card Content */
 .cocktail-image {
-    width: 100%;           /* fills card width */
-    height: 250px;         /* fixed height or adjust as needed */
-    border-radius: 0;      /* rectangular */
-    object-fit: cover;     /* fills box without stretching */
-    margin-bottom: 15px;   /* space below image */
-    border: none;          /* optional: remove white border */
+    width: 100%;             /* fills card width */
+    height: 250px;           /* fixed height, adjust as needed */
+    border-radius: 15px;     /* rounded corners */
+    object-fit: cover;       /* fills box without stretching */
+    object-position: top center; /* focus on top of image */
+    margin-bottom: 15px;     /* space below image */
+    border: none;            /* optional: remove border */
     box-shadow: var(--shadow-sm);
 }
+
 
 .cocktail-name {
     font-size: 1.5rem;
@@ -840,6 +842,7 @@ button, a {
     background: var(--violet);
     border-radius: 3px;
 }
+
 
 
 

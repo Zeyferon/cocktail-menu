@@ -381,70 +381,126 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ===========================================
-    // NEW: Email Notification Functions
+    // FIREBASE ORDER MANAGEMENT
     // ===========================================
     
-    // YOUR EMAIL - CHANGE THIS TO YOUR EMAIL ADDRESS!
-    const YOUR_EMAIL = 'zeyferon@gmail.com'; // ← CHANGE THIS!
+    // Check if Firebase is available
+    let firebaseAvailable = false;
     
-    // Save order with email notification
-    async function saveOrderWithEmail(order) {
-        // 1. Save to localStorage
-        let orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
-        order.id = Date.now();
-        orders.push(order);
-        localStorage.setItem('cocktailOrders', JSON.stringify(orders));
-        
-        // 2. Send email notification
-        await sendEmailNotification(order);
-        
-        return order;
+    // Try to initialize Firebase
+    try {
+        if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+            firebaseAvailable = true;
+            console.log('Firebase is available');
+        }
+    } catch (error) {
+        console.log('Firebase not available:', error);
     }
     
-    // Send email notification
-    async function sendEmailNotification(order) {
-        const subject = `🍸 New Cocktail Order - ${order.name}`;
+    // Save order to Firebase
+    async function saveOrderToFirebase(order) {
+        if (!firebaseAvailable) {
+            console.log('Firebase not available, saving to localStorage only');
+            saveOrderToLocalStorage(order);
+            return null;
+        }
         
-        const body = `
-NEW COCKTAIL ORDER RECEIVED!
-
-📋 ORDER DETAILS:
-• 👤 Name: ${order.name || 'Guest'}
-• 🍸 Drink: ${order.drink || 'Not specified'}
-• ➕ Extras: ${order.extras && order.extras.length > 0 ? order.extras.join(', ') : 'None'}
-• 📝 Special Instructions: ${order.specialInstructions || 'None'}
-• ⏰ Time: ${order.timestamp}
-• 🔑 Order ID: ${order.id}
-• 🌐 Language: ${order.language || 'en'}
-
----
-Home Cocktail Bar System
-Order received via QR code menu
-        `.trim();
-        
-        // Create mailto link
-        const mailtoLink = `mailto:${YOUR_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        
-        // Try to open email client
         try {
-            // Open in new tab
-            window.open(mailtoLink, '_blank');
+            // Add timestamp and ID
+            order.id = Date.now();
+            order.timestamp = new Date().toISOString();
+            order.status = 'pending';
             
-            // Alternative: Open in same window if popup blocked
-            setTimeout(() => {
-                window.location.href = mailtoLink;
-            }, 100);
+            // Save to Firebase
+            const docRef = await firebase.firestore().collection('orders').add(order);
+            console.log('Order saved to Firebase with ID:', docRef.id);
             
-            console.log('Email notification sent for order:', order.id);
+            // Also save to localStorage as backup
+            saveOrderToLocalStorage(order);
+            
+            return docRef.id;
         } catch (error) {
-            console.error('Could not open email client:', error);
-            // Show fallback message
-            alert(`Order #${order.id} placed! The bar manager has been notified.`);
+            console.error('Error saving to Firebase:', error);
+            // Fallback to localStorage
+            saveOrderToLocalStorage(order);
+            return null;
+        }
+    }
+    
+    // Save order to localStorage (fallback)
+    function saveOrderToLocalStorage(order) {
+        let orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
+        order.id = order.id || Date.now();
+        orders.push(order);
+        localStorage.setItem('cocktailOrders', JSON.stringify(orders));
+        console.log('Order saved to localStorage:', order.id);
+    }
+    
+    // Get orders from Firebase (for admin)
+    async function getOrdersFromFirebase() {
+        if (!firebaseAvailable) {
+            console.log('Firebase not available, getting from localStorage');
+            return getOrdersFromLocalStorage();
+        }
+        
+        try {
+            const snapshot = await firebase.firestore().collection('orders').orderBy('timestamp', 'desc').get();
+            const orders = [];
+            
+            snapshot.forEach(doc => {
+                const order = doc.data();
+                order.firebaseId = doc.id; // Store Firebase document ID
+                orders.push(order);
+            });
+            
+            console.log('Got', orders.length, 'orders from Firebase');
+            return orders;
+        } catch (error) {
+            console.error('Error getting orders from Firebase:', error);
+            return getOrdersFromLocalStorage();
+        }
+    }
+    
+    // Get orders from localStorage (fallback)
+    function getOrdersFromLocalStorage() {
+        const orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
+        console.log('Got', orders.length, 'orders from localStorage');
+        return orders;
+    }
+    
+    // Update order status in Firebase
+    async function updateOrderStatus(firebaseId, status) {
+        if (!firebaseAvailable) return false;
+        
+        try {
+            await firebase.firestore().collection('orders').doc(firebaseId).update({
+                status: status,
+                updatedAt: new Date().toISOString()
+            });
+            console.log('Order status updated:', firebaseId, '->', status);
+            return true;
+        } catch (error) {
+            console.error('Error updating order status:', error);
+            return false;
+        }
+    }
+    
+    // Delete order from Firebase
+    async function deleteOrderFromFirebase(firebaseId) {
+        if (!firebaseAvailable) return false;
+        
+        try {
+            await firebase.firestore().collection('orders').doc(firebaseId).delete();
+            console.log('Order deleted from Firebase:', firebaseId);
+            return true;
+        } catch (error) {
+            console.error('Error deleting order:', error);
+            return false;
         }
     }
     
     // ===========================================
-    // END OF NEW FUNCTIONS
+    // END OF FIREBASE FUNCTIONS
     // ===========================================
 
     // Initialize form listeners
@@ -477,7 +533,7 @@ Order received via QR code menu
             input.addEventListener('change', updateOrderPreview);
         });
         
-        // Form submission - UPDATED WITH EMAIL FUNCTIONALITY
+        // Form submission - UPDATED WITH FIREBASE
         orderForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -490,11 +546,13 @@ Order received via QR code menu
                 specialInstructions: document.getElementById('specialInstructions').value,
                 timestamp: new Date().toLocaleString(),
                 status: 'pending',
-                language: window.languageManager ? window.languageManager.currentLang : 'en'
+                language: window.languageManager ? window.languageManager.currentLang : 'en',
+                device: navigator.userAgent,
+                ip: await getClientIP() // Get client IP if possible
             };
             
-            // NEW: Save order with email notification
-            const savedOrder = await saveOrderWithEmail(formData);
+            // Save order to Firebase
+            const firebaseId = await saveOrderToFirebase(formData);
             
             // Show success modal
             if (successModal) {
@@ -529,8 +587,19 @@ Order received via QR code menu
                 if (successModal) {
                     successModal.style.display = 'none';
                 }
-            }, 3000); // Increased to 3 seconds to allow email to open
+            }, 2000);
         });
+    }
+    
+    // Helper function to get client IP (approximate)
+    async function getClientIP() {
+        try {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            return data.ip || 'Unknown';
+        } catch (error) {
+            return 'Unknown';
+        }
     }
 
     // Modal functionality
@@ -620,8 +689,11 @@ Order received via QR code menu
         });
     }
 
-    // Make function globally available for language manager
+    // Make functions globally available
     window.updateCocktailsWithTranslation = generateCocktailCards;
+    window.getOrdersFromFirebase = getOrdersFromFirebase;
+    window.updateOrderStatus = updateOrderStatus;
+    window.deleteOrderFromFirebase = deleteOrderFromFirebase;
 
     // Initialize everything
     function init() {

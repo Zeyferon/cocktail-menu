@@ -380,6 +380,73 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // ===========================================
+    // NEW: Email Notification Functions
+    // ===========================================
+    
+    // YOUR EMAIL - CHANGE THIS TO YOUR EMAIL ADDRESS!
+    const YOUR_EMAIL = 'zeyferon@gmail.com'; // ← CHANGE THIS!
+    
+    // Save order with email notification
+    async function saveOrderWithEmail(order) {
+        // 1. Save to localStorage
+        let orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
+        order.id = Date.now();
+        orders.push(order);
+        localStorage.setItem('cocktailOrders', JSON.stringify(orders));
+        
+        // 2. Send email notification
+        await sendEmailNotification(order);
+        
+        return order;
+    }
+    
+    // Send email notification
+    async function sendEmailNotification(order) {
+        const subject = `🍸 New Cocktail Order - ${order.name}`;
+        
+        const body = `
+NEW COCKTAIL ORDER RECEIVED!
+
+📋 ORDER DETAILS:
+• 👤 Name: ${order.name || 'Guest'}
+• 🍸 Drink: ${order.drink || 'Not specified'}
+• ➕ Extras: ${order.extras && order.extras.length > 0 ? order.extras.join(', ') : 'None'}
+• 📝 Special Instructions: ${order.specialInstructions || 'None'}
+• ⏰ Time: ${order.timestamp}
+• 🔑 Order ID: ${order.id}
+• 🌐 Language: ${order.language || 'en'}
+
+---
+Home Cocktail Bar System
+Order received via QR code menu
+        `.trim();
+        
+        // Create mailto link
+        const mailtoLink = `mailto:${YOUR_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        
+        // Try to open email client
+        try {
+            // Open in new tab
+            window.open(mailtoLink, '_blank');
+            
+            // Alternative: Open in same window if popup blocked
+            setTimeout(() => {
+                window.location.href = mailtoLink;
+            }, 100);
+            
+            console.log('Email notification sent for order:', order.id);
+        } catch (error) {
+            console.error('Could not open email client:', error);
+            // Show fallback message
+            alert(`Order #${order.id} placed! The bar manager has been notified.`);
+        }
+    }
+    
+    // ===========================================
+    // END OF NEW FUNCTIONS
+    // ===========================================
+
     // Initialize form listeners
     function initFormListeners() {
         if (!orderForm) return;
@@ -410,8 +477,8 @@ document.addEventListener('DOMContentLoaded', function() {
             input.addEventListener('change', updateOrderPreview);
         });
         
-        // Form submission
-        orderForm.addEventListener('submit', function(e) {
+        // Form submission - UPDATED WITH EMAIL FUNCTIONALITY
+        orderForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             // Get form data
@@ -426,8 +493,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 language: window.languageManager ? window.languageManager.currentLang : 'en'
             };
             
-            // Save order to localStorage
-            saveOrder(formData);
+            // NEW: Save order with email notification
+            const savedOrder = await saveOrderWithEmail(formData);
             
             // Show success modal
             if (successModal) {
@@ -462,21 +529,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (successModal) {
                     successModal.style.display = 'none';
                 }
-            }, 2000);
+            }, 3000); // Increased to 3 seconds to allow email to open
         });
-    }
-
-    // Save order to localStorage
-    function saveOrder(order) {
-        let orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
-        
-        // Add unique ID
-        order.id = Date.now();
-        orders.push(order);
-        localStorage.setItem('cocktailOrders', JSON.stringify(orders));
-        
-        // Log for debugging
-        console.log('New Order Saved:', order);
     }
 
     // Modal functionality

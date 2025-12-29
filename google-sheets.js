@@ -1,5 +1,5 @@
 // google-sheets.js
-const GOOGLE_SHEETS_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL'; // You'll get this later
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzXyMwChWAyONLG-o8l_iryqZHkLYKqrkrNg0qUgAr8_sggsI_WDgks3tCeRFOxozYHXw/exec'; // You'll get this later
 
 class GoogleSheetsAPI {
     constructor() {

@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Admin password
     const ADMIN_PASSWORD = "1234";
     let currentOrderId = null;
+    let currentFirebaseId = null;
     
     // DOM Elements
     const passwordSection = document.getElementById('passwordSection');
@@ -72,9 +73,53 @@ document.addEventListener('DOMContentLoaded', function() {
         ordersDashboard.style.display = 'none';
     });
     
-    // Load orders from localStorage
-    function loadOrders() {
-        let orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
+    // ===========================================
+    // FIREBASE FUNCTIONS
+    // ===========================================
+    
+    // Check if Firebase is available
+    let firebaseAvailable = false;
+    
+    // Try to initialize Firebase
+    try {
+        if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+            firebaseAvailable = true;
+            console.log('Firebase is available in admin');
+        }
+    } catch (error) {
+        console.log('Firebase not available in admin:', error);
+    }
+    
+    // Get orders from Firebase (or localStorage as fallback)
+    async function loadOrders() {
+        let orders = [];
+        
+        if (firebaseAvailable) {
+            // Try to get from Firebase
+            try {
+                const snapshot = await firebase.firestore().collection('orders').orderBy('timestamp', 'desc').get();
+                orders = [];
+                
+                snapshot.forEach(doc => {
+                    const order = doc.data();
+                    order.firebaseId = doc.id; // Store Firebase document ID
+                    orders.push(order);
+                });
+                
+                console.log('Got', orders.length, 'orders from Firebase');
+                
+                // Also save to localStorage for offline access
+                localStorage.setItem('cocktailOrders', JSON.stringify(orders));
+            } catch (error) {
+                console.error('Error getting orders from Firebase:', error);
+                // Fallback to localStorage
+                orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
+            }
+        } else {
+            // Fallback to localStorage
+            orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
+            console.log('Got', orders.length, 'orders from localStorage (Firebase not available)');
+        }
         
         // Ensure all orders have required fields
         orders = orders.map((order, index) => {
@@ -83,22 +128,51 @@ document.addEventListener('DOMContentLoaded', function() {
             return order;
         });
         
-        // Sort by time (newest first)
-        orders.sort((a, b) => {
-            const timeA = new Date(a.timestamp || 0).getTime();
-            const timeB = new Date(b.timestamp || 0).getTime();
-            return timeB - timeA;
-        });
-        
         updateStatistics(orders);
         renderOrdersList(orders);
     }
+    
+    // Update order status in Firebase
+    async function updateOrderStatus(firebaseId, status) {
+        if (!firebaseAvailable) return false;
+        
+        try {
+            await firebase.firestore().collection('orders').doc(firebaseId).update({
+                status: status,
+                updatedAt: new Date().toISOString()
+            });
+            console.log('Order status updated in Firebase:', firebaseId, '->', status);
+            return true;
+        } catch (error) {
+            console.error('Error updating order status in Firebase:', error);
+            return false;
+        }
+    }
+    
+    // Delete order from Firebase
+    async function deleteOrderFromFirebase(firebaseId) {
+        if (!firebaseAvailable) return false;
+        
+        try {
+            await firebase.firestore().collection('orders').doc(firebaseId).delete();
+            console.log('Order deleted from Firebase:', firebaseId);
+            return true;
+        } catch (error) {
+            console.error('Error deleting order from Firebase:', error);
+            return false;
+        }
+    }
+    
+    // ===========================================
+    // END OF FIREBASE FUNCTIONS
+    // ===========================================
     
     // Update statistics
     function updateStatistics(orders) {
         const today = new Date().toLocaleDateString();
         const todayOrdersCount = orders.filter(order => {
-            return order.timestamp && order.timestamp.includes(today);
+            const orderDate = order.timestamp ? new Date(order.timestamp).toLocaleDateString() : '';
+            return orderDate === today;
         }).length;
         
         const pendingCount = orders.filter(order => order.status === 'pending').length;
@@ -125,12 +199,20 @@ document.addEventListener('DOMContentLoaded', function() {
             const firstLetter = order.name ? order.name.charAt(0).toUpperCase() : 'G';
             
             // Format time
-            const time = order.timestamp ? 
-                new Date(order.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 
-                '--:--';
+            let time = '--:--';
+            try {
+                if (order.timestamp) {
+                    const date = new Date(order.timestamp);
+                    if (!isNaN(date.getTime())) {
+                        time = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    }
+                }
+            } catch (e) {
+                console.log('Error parsing time:', e);
+            }
             
             return `
-                <div class="order-item ${order.status}" data-order-id="${order.id}" onclick="viewOrderDetails(${order.id})">
+                <div class="order-item ${order.status}" onclick="viewOrderDetails('${order.id}', ${order.firebaseId ? `'${order.firebaseId}'` : 'null'})">
                     <div class="order-header">
                         <div class="order-customer">
                             <div class="customer-avatar">${firstLetter}</div>
@@ -154,21 +236,28 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // View order details
-    window.viewOrderDetails = function(orderId) {
+    window.viewOrderDetails = async function(orderId, firebaseId) {
+        // Get orders from localStorage (they should be synced from Firebase)
         const orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
-        const order = orders.find(o => o.id === orderId);
+        
+        // Find the order by ID or Firebase ID
+        const order = orders.find(o => 
+            (firebaseId && o.firebaseId === firebaseId) || 
+            (!firebaseId && o.id == orderId)
+        );
         
         if (!order) {
             alert('Order not found!');
             return;
         }
         
-        currentOrderId = orderId;
+        currentOrderId = order.id || orderId;
+        currentFirebaseId = firebaseId || order.firebaseId;
         
         const detailsHTML = `
             <p>
                 <strong>Order ID:</strong> 
-                <span>#${order.id}</span>
+                <span>#${order.id || orderId}</span>
             </p>
             <p>
                 <strong>Customer:</strong> 
@@ -191,9 +280,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 <span>${order.specialInstructions || 'None'}</span>
             </p>
             <p>
+                <strong>Language:</strong> 
+                <span>${order.language || 'en'}</span>
+            </p>
+            <p>
                 <strong>Status:</strong> 
                 <span class="status ${order.status}">${order.status}</span>
             </p>
+            ${order.firebaseId ? `<p><strong>Firebase ID:</strong> <span>${order.firebaseId}</span></p>` : ''}
         `;
         
         orderDetailsContent.innerHTML = detailsHTML;
@@ -201,48 +295,101 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // Mark order as complete
-    completeOrderBtn.addEventListener('click', function() {
-        if (!currentOrderId) return;
+    completeOrderBtn.addEventListener('click', async function() {
+        if (!currentOrderId && !currentFirebaseId) return;
         
         if (!confirm('Mark this order as complete?')) return;
         
-        const orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
-        const orderIndex = orders.findIndex(o => o.id === currentOrderId);
+        let success = false;
         
-        if (orderIndex !== -1) {
-            orders[orderIndex].status = 'completed';
-            localStorage.setItem('cocktailOrders', JSON.stringify(orders));
+        // Try to update in Firebase first
+        if (currentFirebaseId) {
+            success = await updateOrderStatus(currentFirebaseId, 'completed');
+        }
+        
+        if (success) {
+            // Update localStorage
+            let orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
+            const orderIndex = orders.findIndex(o => 
+                (currentFirebaseId && o.firebaseId === currentFirebaseId) || 
+                (!currentFirebaseId && o.id == currentOrderId)
+            );
             
-            // Close modal
-            orderDetailsModal.style.display = 'none';
+            if (orderIndex !== -1) {
+                orders[orderIndex].status = 'completed';
+                localStorage.setItem('cocktailOrders', JSON.stringify(orders));
+            }
             
             // Reload orders
-            loadOrders();
+            await loadOrders();
+            orderDetailsModal.style.display = 'none';
             
             // Vibrate on success
             if (navigator.vibrate) navigator.vibrate(100);
+        } else {
+            // Fallback to localStorage only
+            const orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
+            const orderIndex = orders.findIndex(o => o.id == currentOrderId);
+            
+            if (orderIndex !== -1) {
+                orders[orderIndex].status = 'completed';
+                localStorage.setItem('cocktailOrders', JSON.stringify(orders));
+                
+                // Reload orders
+                await loadOrders();
+                orderDetailsModal.style.display = 'none';
+                
+                if (navigator.vibrate) navigator.vibrate(100);
+            } else {
+                alert('Could not update order status. Please try again.');
+            }
         }
     });
     
     // Delete order
-    deleteOrderBtn.addEventListener('click', function() {
-        if (!currentOrderId) return;
+    deleteOrderBtn.addEventListener('click', async function() {
+        if (!currentOrderId && !currentFirebaseId) return;
         
         if (!confirm('Are you sure you want to delete this order?')) return;
         
-        const orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
-        const filteredOrders = orders.filter(order => order.id !== currentOrderId);
+        let success = false;
         
-        localStorage.setItem('cocktailOrders', JSON.stringify(filteredOrders));
-        orderDetailsModal.style.display = 'none';
-        loadOrders();
+        // Try to delete from Firebase first
+        if (currentFirebaseId) {
+            success = await deleteOrderFromFirebase(currentFirebaseId);
+        }
         
-        // Vibrate on delete
-        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+        // Update localStorage regardless
+        let orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
+        orders = orders.filter(order => {
+            if (currentFirebaseId && order.firebaseId === currentFirebaseId) {
+                return false;
+            }
+            if (!currentFirebaseId && order.id == currentOrderId) {
+                return false;
+            }
+            return true;
+        });
+        
+        localStorage.setItem('cocktailOrders', JSON.stringify(orders));
+        
+        if (success || !currentFirebaseId) {
+            orderDetailsModal.style.display = 'none';
+            await loadOrders();
+            
+            // Vibrate on delete
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+        } else {
+            alert('Could not delete order from Firebase, but removed from local storage.');
+            orderDetailsModal.style.display = 'none';
+            await loadOrders();
+        }
     });
     
     // Clear completed orders
-    clearCompletedBtn.addEventListener('click', function() {
+    clearCompletedBtn.addEventListener('click', async function() {
+        if (!confirm('Clear all completed orders? This will only clear from local storage.')) return;
+        
         const orders = JSON.parse(localStorage.getItem('cocktailOrders')) || [];
         const pendingOrders = orders.filter(order => order.status !== 'completed');
         
@@ -251,10 +398,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        if (!confirm('Clear all completed orders? This cannot be undone.')) return;
-        
         localStorage.setItem('cocktailOrders', JSON.stringify(pendingOrders));
-        loadOrders();
+        await loadOrders();
         
         // Vibrate on clear
         if (navigator.vibrate) navigator.vibrate([100, 30, 100, 30, 100]);
@@ -278,14 +423,23 @@ document.addEventListener('DOMContentLoaded', function() {
     closeModalBtn.addEventListener('click', () => {
         orderDetailsModal.style.display = 'none';
         currentOrderId = null;
+        currentFirebaseId = null;
     });
     
     window.addEventListener('click', (e) => {
         if (e.target === orderDetailsModal) {
             orderDetailsModal.style.display = 'none';
             currentOrderId = null;
+            currentFirebaseId = null;
         }
     });
+    
+    // Auto-refresh orders every 30 seconds when dashboard is open
+    setInterval(() => {
+        if (ordersDashboard.style.display === 'block') {
+            loadOrders();
+        }
+    }, 30000);
     
     // Keyboard shortcuts for admin
     document.addEventListener('keydown', (e) => {
@@ -301,6 +455,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (orderDetailsModal.style.display === 'flex') {
                 orderDetailsModal.style.display = 'none';
                 currentOrderId = null;
+                currentFirebaseId = null;
             }
         }
     });
@@ -322,4 +477,3 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(style);
 });
-
